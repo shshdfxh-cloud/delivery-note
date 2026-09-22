@@ -127,3 +127,9 @@ Built for the September 2026 SERV Hackathon Open Track. Prior submission status 
 - Browser launch/isolation API: https://playwright.dev/python/docs/api/class-browsertype
 
 MIT licensed.
+
+## Existing-entry update and public screenshot
+
+The existing competition entry was updated in place; the public amendment is attached to the original X conversation. See [CONTEST_UPDATE.md](CONTEST_UPDATE.md) for the verified update URL and exact status, including the unchanged original submission.
+
+![General purpose evidence review on the published demo](docs/review-result.png)

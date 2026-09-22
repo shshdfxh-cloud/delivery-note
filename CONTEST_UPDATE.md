@@ -29,6 +29,20 @@ The intended users are freelance builders, small studios and clients reviewing s
 
 ## Existing submission status
 
-The original form was already submitted and its receipt is retained privately. The currently accessible form is a new-entry form; no edit link has been verified. Therefore the existing repository/demo are updated in place and the original X entry will carry the amendment. No new form submission or deletion of the original post is performed. Public amendment confirmation is recorded after posting; this document alone is not evidence that a form was edited.
+The original form was already submitted and its receipt is retained privately. The currently accessible form is a new-entry form; no edit link has been verified. Therefore the existing repository/demo are updated in place and the original X entry now carries the amendment. No new form submission or deletion of the original post is performed. Public amendment confirmation is recorded after posting; this document alone is not evidence that a form was edited.
 
 Official requirements checked: https://www.openserv.ai/hackathon (public X name/concept/images/links and @openservai, followed by the submission form; deadline 28 September 00:00 UTC). No account, payment or data-collection setting changed in this revision.
+
+## Published amendment confirmed
+
+The update was published **under the original entry in the same conversation** on 22 September 2026 at 15:32 UTC+08:00:
+
+https://x.com/SfBF1xU3Tv1SiR2/status/2102299958418530394
+
+Its independent permalink was opened and refreshed, confirming the text, original-entry parent, unchanged demo link, @openservai mention and #SERVHackathon. The original post was not deleted or replaced. Receipt: `verification/x-amendment-20260922.json`.
+
+The attempted new image upload did not appear in the independently refreshed update post. The original entry retains its original screenshot. The current public demonstration screenshot is provided here instead; no missing attachment is represented as published.
+
+![Current public general review: exact references, measured 10/12 completion and missing evidence](docs/review-result.png)
+
+This confirms a public amendment, **not** an edited Typeform record or organizer approval of the amendment. Existing submitted code/demo URLs remain unchanged and now serve the revised product. No second application was submitted.
