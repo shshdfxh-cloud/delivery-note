@@ -1,0 +1,456 @@
+{
+  "synthetic": true,
+  "description": "Invented example files, freshly checked on each run; not saved verdicts.",
+  "cases": [
+    {
+      "id": "hidden-data-error",
+      "title": {
+        "zh": "行数对了，内容错了",
+        "en": "Right count. Wrong data."
+      },
+      "caption": {
+        "zh": "数字自洽，却把50改成了500。",
+        "en": "Totals agree, but 50 silently became 500."
+      },
+      "objective_en": "Deduplicate source orders by order_id, retaining the first occurrence; trim all fields and preserve order. Deliver four orders without changing original values. summary.json total must equal the delivered amount sum.",
+      "package": {
+        "objective": "将原始订单按 order_id 去重，保留第一次出现的记录，去掉所有字段两端空格，保持顺序。应交付4笔订单，原值不得篡改；summary.json 的 total 应等于交付明细 amount 合计。",
+        "profile": "data",
+        "scope_confirmed": true,
+        "files": [
+          {
+            "name": "source.csv",
+            "role": "reference",
+            "content": "order_id,customer,amount\n A-01 , Lin , 100.00 \nA-02,Chen,200.00\nA-02,Chen,200.00\nA-03,Wu,50.00\nA-04,Zhou,75.00\n"
+          },
+          {
+            "name": "orders.csv",
+            "role": "deliverable",
+            "content": "order_id,customer,amount\nA-01,Lin,100.00\nA-02,Chen,200.00\nA-03,Wu,500.00\nA-04,Zhou,75.00\n"
+          },
+          {
+            "name": "summary.json",
+            "role": "deliverable",
+            "content": "{\"orders\":4,\"total\":875.00}\n"
+          }
+        ],
+        "requirements": [
+          {
+            "id": "R1",
+            "title": "Required order columns / 订单字段完整",
+            "critical": true,
+            "check": {
+              "type": "csv_columns",
+              "file": "orders.csv",
+              "columns": [
+                "order_id",
+                "customer",
+                "amount"
+              ]
+            }
+          },
+          {
+            "id": "R2",
+            "title": "Four delivered orders / 交付4笔订单",
+            "critical": true,
+            "check": {
+              "type": "csv_row_count",
+              "file": "orders.csv",
+              "expected": 4
+            }
+          },
+          {
+            "id": "R3",
+            "title": "No repeated order IDs / 订单号不重复",
+            "critical": true,
+            "check": {
+              "type": "csv_unique",
+              "file": "orders.csv",
+              "columns": [
+                "order_id"
+              ]
+            }
+          },
+          {
+            "id": "R4",
+            "title": "Every cell matches the intended transformation / 按客户规则逐格核对",
+            "critical": true,
+            "check": {
+              "type": "csv_transform",
+              "source": "source.csv",
+              "file": "orders.csv",
+              "keys": [
+                "order_id"
+              ],
+              "trim": true,
+              "caseFold": false,
+              "unordered": false
+            }
+          },
+          {
+            "id": "R5",
+            "title": "Summary agrees with delivered amounts / 汇总与明细金额一致",
+            "critical": true,
+            "check": {
+              "type": "sum_matches_json",
+              "source": "orders.csv",
+              "column": "amount",
+              "file": "summary.json",
+              "pointer": "/total"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "correct-data",
+      "title": {
+        "zh": "数据确实符合要求",
+        "en": "A correct data delivery"
+      },
+      "caption": {
+        "zh": "从原始文件重算，每个单元格都核对。",
+        "en": "Recompute from source, verify every output cell."
+      },
+      "objective_en": "Deduplicate source orders by order_id, retaining the first occurrence; trim all fields and preserve order. Deliver four orders without changing original values. summary.json total must equal the delivered amount sum.",
+      "package": {
+        "objective": "将原始订单按 order_id 去重，保留第一次出现的记录，去掉所有字段两端空格，保持顺序。应交付4笔订单，原值不得篡改；summary.json 的 total 应等于交付明细 amount 合计。",
+        "profile": "data",
+        "scope_confirmed": true,
+        "files": [
+          {
+            "name": "source.csv",
+            "role": "reference",
+            "content": "order_id,customer,amount\n A-01 , Lin , 100.00 \nA-02,Chen,200.00\nA-02,Chen,200.00\nA-03,Wu,50.00\nA-04,Zhou,75.00\n"
+          },
+          {
+            "name": "orders.csv",
+            "role": "deliverable",
+            "content": "order_id,customer,amount\nA-01,Lin,100.00\nA-02,Chen,200.00\nA-03,Wu,50.00\nA-04,Zhou,75.00\n"
+          },
+          {
+            "name": "summary.json",
+            "role": "deliverable",
+            "content": "{\"orders\":4,\"total\":425.00}\n"
+          }
+        ],
+        "requirements": [
+          {
+            "id": "R1",
+            "title": "Required order columns / 订单字段完整",
+            "critical": true,
+            "check": {
+              "type": "csv_columns",
+              "file": "orders.csv",
+              "columns": [
+                "order_id",
+                "customer",
+                "amount"
+              ]
+            }
+          },
+          {
+            "id": "R2",
+            "title": "Four delivered orders / 交付4笔订单",
+            "critical": true,
+            "check": {
+              "type": "csv_row_count",
+              "file": "orders.csv",
+              "expected": 4
+            }
+          },
+          {
+            "id": "R3",
+            "title": "No repeated order IDs / 订单号不重复",
+            "critical": true,
+            "check": {
+              "type": "csv_unique",
+              "file": "orders.csv",
+              "columns": [
+                "order_id"
+              ]
+            }
+          },
+          {
+            "id": "R4",
+            "title": "Every cell matches the intended transformation / 按客户规则逐格核对",
+            "critical": true,
+            "check": {
+              "type": "csv_transform",
+              "source": "source.csv",
+              "file": "orders.csv",
+              "keys": [
+                "order_id"
+              ],
+              "trim": true,
+              "caseFold": false,
+              "unordered": false
+            }
+          },
+          {
+            "id": "R5",
+            "title": "Summary agrees with delivered amounts / 汇总与明细金额一致",
+            "critical": true,
+            "check": {
+              "type": "sum_matches_json",
+              "source": "orders.csv",
+              "column": "amount",
+              "file": "summary.json",
+              "pointer": "/total"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "broken-web",
+      "title": {
+        "zh": "页面能开，目的没实现",
+        "en": "It opens. It still fails."
+      },
+      "caption": {
+        "zh": "按钮能点，但优惠码和异常输入没处理。",
+        "en": "The button works; discount and edge cases do not."
+      },
+      "objective_en": "Deliver a working quote page: unit price 20; quantity 3 shows ¥60.00; code SAVE10 shows ¥54.00; quantity 0 shows Quantity must be positive. A success label alone is insufficient.",
+      "package": {
+        "objective": "交付能实际使用的报价网页：单价20，输入数量3显示¥60.00；输入SAVE10显示九折价¥54.00；数量为0时显示Quantity must be positive。不是只显示一个“成功”提示。",
+        "profile": "web",
+        "scope_confirmed": true,
+        "files": [
+          {
+            "name": "index.html",
+            "role": "deliverable",
+            "content": "<!doctype html><html lang=\"en\"><meta charset=\"utf-8\"><title>Order quote</title><style>body{font:18px system-ui;max-width:520px;margin:60px auto;padding:24px;background:#f3f4f6}label{display:block;margin:20px 0 8px}input,button{font:inherit;padding:10px}button{display:block;margin-top:24px}output{display:block;margin-top:24px;font-size:30px}</style><h1>Order quote</h1><p>20 per unit. SAVE10 takes 10% off.</p><label for=\"quantity\">Quantity</label><input id=\"quantity\" type=\"number\" value=\"1\"><label for=\"code\">Discount code</label><input id=\"code\"><button id=\"calculate\">Calculate</button><output id=\"total\" aria-live=\"polite\"></output><script>document.querySelector('#calculate').addEventListener('click',()=>{const q=Number(document.querySelector('#quantity').value),code=document.querySelector('#code').value;const out=document.querySelector('#total');out.textContent='¥'+(q*20).toFixed(2);});</script></html>"
+          }
+        ],
+        "requirements": [
+          {
+            "id": "R1",
+            "title": "Usable HTML entry / HTML入口已交付",
+            "critical": true,
+            "check": {
+              "type": "file_exists",
+              "file": "index.html"
+            }
+          },
+          {
+            "id": "R2",
+            "title": "Regular quote / 正常数量报价",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "3"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": ""
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "¥60.00"
+                }
+              ]
+            }
+          },
+          {
+            "id": "R3",
+            "title": "Discount actually changes the price / 优惠码实际生效",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "3"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": "SAVE10"
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "¥54.00"
+                }
+              ]
+            }
+          },
+          {
+            "id": "R4",
+            "title": "Reject invalid quantity / 拒绝无效数量",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "0"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": ""
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "Quantity must be positive"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "correct-web",
+      "title": {
+        "zh": "实际跑通用户流程",
+        "en": "An actual working journey"
+      },
+      "caption": {
+        "zh": "正常报价、优惠码、无效数量三条实跑。",
+        "en": "Run normal, discount and invalid-input journeys."
+      },
+      "objective_en": "Deliver a working quote page: unit price 20; quantity 3 shows ¥60.00; code SAVE10 shows ¥54.00; quantity 0 shows Quantity must be positive. A success label alone is insufficient.",
+      "package": {
+        "objective": "交付能实际使用的报价网页：单价20，输入数量3显示¥60.00；输入SAVE10显示九折价¥54.00；数量为0时显示Quantity must be positive。不是只显示一个“成功”提示。",
+        "profile": "web",
+        "scope_confirmed": true,
+        "files": [
+          {
+            "name": "index.html",
+            "role": "deliverable",
+            "content": "<!doctype html><html lang=\"en\"><meta charset=\"utf-8\"><title>Order quote</title><style>body{font:18px system-ui;max-width:520px;margin:60px auto;padding:24px;background:#f3f4f6}label{display:block;margin:20px 0 8px}input,button{font:inherit;padding:10px}button{display:block;margin-top:24px}output{display:block;margin-top:24px;font-size:30px}</style><h1>Order quote</h1><p>20 per unit. SAVE10 takes 10% off.</p><label for=\"quantity\">Quantity</label><input id=\"quantity\" type=\"number\" value=\"1\"><label for=\"code\">Discount code</label><input id=\"code\"><button id=\"calculate\">Calculate</button><output id=\"total\" aria-live=\"polite\"></output><script>document.querySelector('#calculate').addEventListener('click',()=>{const q=Number(document.querySelector('#quantity').value),code=document.querySelector('#code').value;const out=document.querySelector('#total');if(!Number.isFinite(q)||q<=0){out.textContent='Quantity must be positive';return;}out.textContent='¥'+(q*20*(code==='SAVE10'?0.9:1)).toFixed(2);});</script></html>"
+          }
+        ],
+        "requirements": [
+          {
+            "id": "R1",
+            "title": "Usable HTML entry / HTML入口已交付",
+            "critical": true,
+            "check": {
+              "type": "file_exists",
+              "file": "index.html"
+            }
+          },
+          {
+            "id": "R2",
+            "title": "Regular quote / 正常数量报价",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "3"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": ""
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "¥60.00"
+                }
+              ]
+            }
+          },
+          {
+            "id": "R3",
+            "title": "Discount actually changes the price / 优惠码实际生效",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "3"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": "SAVE10"
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "¥54.00"
+                }
+              ]
+            }
+          },
+          {
+            "id": "R4",
+            "title": "Reject invalid quantity / 拒绝无效数量",
+            "critical": true,
+            "check": {
+              "type": "browser_flow",
+              "entry": "index.html",
+              "steps": [
+                {
+                  "action": "fill",
+                  "selector": "#quantity",
+                  "value": "0"
+                },
+                {
+                  "action": "fill",
+                  "selector": "#code",
+                  "value": ""
+                },
+                {
+                  "action": "click",
+                  "selector": "#calculate"
+                },
+                {
+                  "action": "assert_text",
+                  "selector": "#total",
+                  "value": "Quantity must be positive"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

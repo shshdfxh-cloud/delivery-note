@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "Default sample detects hidden corruption through the UI",
+    "Correct data passes and downloaded JSON matches the displayed verdict",
+    "Markdown export contains a nonempty evidence report",
+    "Changing the customer goal invalidates the old report, download and scope confirmation",
+    "File picker upload, source roles, custom criteria and independently calculated hashes verified",
+    "No execution consent means web behavior remains unverified",
+    "UI to local service to isolated browser to evidence report completes end to end",
+    "English language toggle works without modifying evidence",
+    "390px mobile view has no horizontal page overflow",
+    "No browser JavaScript exceptions in the tested workflows"
+  ],
+  "errors": [],
+  "complete": true
+}

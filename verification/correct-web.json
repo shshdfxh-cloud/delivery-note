@@ -1,0 +1,362 @@
+{
+  "schema_version": "delivery-note/2",
+  "engine_version": "0.2.0",
+  "created_at": "2026-09-22T05:27:45.174Z",
+  "snapshot": "da638ea554b67d6219d06cc4c40eeb3a8ef90fc5722c2a222f3afc27220d0c54",
+  "objective": "交付能实际使用的报价网页：单价20，输入数量3显示¥60.00；输入SAVE10显示九折价¥54.00；数量为0时显示Quantity must be positive。不是只显示一个“成功”提示。",
+  "profile": "web",
+  "scope_confirmed": true,
+  "status": "criteria_satisfied",
+  "summary": {
+    "mandatory": 4,
+    "passed": 4,
+    "failed": 0,
+    "unverified": 0
+  },
+  "inventory": [
+    {
+      "name": "index.html",
+      "role": "deliverable",
+      "bytes": 1021,
+      "sha256": "e81d9cd5687e6a765168867d6d725bb7c8e7c43a8a26e903865cc15277ef4328",
+      "problem": null
+    }
+  ],
+  "contract": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "check": {
+        "type": "file_exists",
+        "file": "index.html"
+      }
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "3"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": ""
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "¥60.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R3",
+      "title": "Discount actually changes the price / 优惠码实际生效",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "3"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": "SAVE10"
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "¥54.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R4",
+      "title": "Reject invalid quantity / 拒绝无效数量",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "0"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": ""
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "Quantity must be positive"
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "layer": 1,
+      "status": "pass",
+      "evidence_ids": [
+        "E001"
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "layer": 4,
+      "status": "pass",
+      "evidence_ids": [
+        "E002"
+      ]
+    },
+    {
+      "id": "R3",
+      "title": "Discount actually changes the price / 优惠码实际生效",
+      "critical": true,
+      "layer": 4,
+      "status": "pass",
+      "evidence_ids": [
+        "E003"
+      ]
+    },
+    {
+      "id": "R4",
+      "title": "Reject invalid quantity / 拒绝无效数量",
+      "critical": true,
+      "layer": 4,
+      "status": "pass",
+      "evidence_ids": [
+        "E004"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E001",
+      "requirement_id": "R1",
+      "layer": 1,
+      "method": "file_exists",
+      "status": "pass",
+      "observation": "Read 1021 bytes from the supplied file / 已读取实际文件字节",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "e81d9cd5687e6a765168867d6d725bb7c8e7c43a8a26e903865cc15277ef4328",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E002",
+      "requirement_id": "R2",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "pass",
+      "observation": "Executed 4 actual browser steps including outcome assertions. Fresh profile, uploaded assets only, no outside network.",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "e81d9cd5687e6a765168867d6d725bb7c8e7c43a8a26e903865cc15277ef4328",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:39.266150+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "action": "assert_text",
+          "selector": "#total",
+          "status": "pass"
+        }
+      ],
+      "blocked_requests": 0
+    },
+    {
+      "id": "E003",
+      "requirement_id": "R3",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "pass",
+      "observation": "Executed 4 actual browser steps including outcome assertions. Fresh profile, uploaded assets only, no outside network.",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "e81d9cd5687e6a765168867d6d725bb7c8e7c43a8a26e903865cc15277ef4328",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:40.515364+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "action": "assert_text",
+          "selector": "#total",
+          "status": "pass"
+        }
+      ],
+      "blocked_requests": 0
+    },
+    {
+      "id": "E004",
+      "requirement_id": "R4",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "pass",
+      "observation": "Executed 4 actual browser steps including outcome assertions. Fresh profile, uploaded assets only, no outside network.",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "e81d9cd5687e6a765168867d6d725bb7c8e7c43a8a26e903865cc15277ef4328",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:40.774204+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "action": "assert_text",
+          "selector": "#total",
+          "status": "pass"
+        }
+      ],
+      "blocked_requests": 0
+    }
+  ],
+  "layers": [
+    {
+      "level": 1,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R1"
+      ]
+    },
+    {
+      "level": 2,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 3,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 4,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R2",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "level": 5,
+      "status": "pass",
+      "reason": "Mandatory criteria + confirmed scope. No guarantee beyond this contract.",
+      "requirement_ids": []
+    }
+  ],
+  "next_actions": [],
+  "limitations": [
+    "Conclusions apply only to these byte hashes, objective and declared acceptance criteria.",
+    "Source agreement is not independent verification of real-world truth, customer acceptance, receipt or payment.",
+    "No arbitrary code, authenticated website, production API, PDF or Office document verification is provided.",
+    "Browser execution is an isolated offline sample journey, not a security certification or complete production test."
+  ]
+}

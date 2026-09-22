@@ -1,0 +1,234 @@
+{
+  "examples": {
+    "balanced": {
+      "title": "Ready for review",
+      "caption": "Every reported row is accounted for.",
+      "packet": {
+        "example_only": true,
+        "rows": {
+          "input": 120,
+          "kept": 113,
+          "duplicates": 5,
+          "rejected": 2
+        },
+        "tests": {
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "total": 8
+        },
+        "files": [
+          {
+            "name": "synthetic-output.csv",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "claims": [
+          "ready_for_review"
+        ]
+      }
+    },
+    "missing-row": {
+      "title": "One row is missing",
+      "caption": "A success message would hide a mismatch.",
+      "packet": {
+        "example_only": true,
+        "rows": {
+          "input": 120,
+          "kept": 112,
+          "duplicates": 5,
+          "rejected": 2
+        },
+        "tests": {
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "total": 8
+        },
+        "files": [
+          {
+            "name": "synthetic-output.csv",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "claims": [
+          "ready_for_review"
+        ]
+      }
+    },
+    "unproven-payment": {
+      "title": "A claim needs a receipt",
+      "caption": "A self-reported payment is not proof.",
+      "packet": {
+        "example_only": true,
+        "rows": {
+          "input": 120,
+          "kept": 113,
+          "duplicates": 5,
+          "rejected": 2
+        },
+        "tests": {
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "total": 8
+        },
+        "files": [
+          {
+            "name": "synthetic-output.csv",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "claims": [
+          "paid",
+          "customer_accepted"
+        ]
+      }
+    }
+  },
+  "runs": {
+    "missing-row": {
+      "case_id": "missing-row",
+      "serv_called": true,
+      "endpoint": "https://inference-api.openserv.ai/v1/chat/completions",
+      "model": "gpt-5.6-luna",
+      "recorded_at": "2026-09-22T03:59:19.571850+00:00",
+      "request_id": "chatcmpl-EQlwyzK7VstmdOZN2A9lXIXM3kyqR",
+      "usage": {
+        "prompt_tokens": 630,
+        "completion_tokens": 215,
+        "total_tokens": 845,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "review": {
+        "status": "needs_correction",
+        "facts": [
+          {
+            "id": "tests",
+            "text": "The packet reports 8 of 8 tests passed. The actual test run is not authenticated by this check."
+          },
+          {
+            "id": "inventory",
+            "text": "The packet lists 1 file with well-formed hashes. File bytes and external delivery are not verified."
+          }
+        ],
+        "findings": [
+          {
+            "id": "row_balance",
+            "kind": "blocking",
+            "message": "Output, duplicates and rejected rows do not add up to the input."
+          }
+        ],
+        "scope": "Internal consistency only. Not authentication of execution, source files, customer acceptance or payment."
+      },
+      "note": "Summary  \nCorrection required: output, duplicate, and rejected rows do not reconcile to the input [row_balance]. The delivery is not ready for acceptance.\n\nEvidence  \nThe packet reports 8 of 8 tests passed, but this check does not authenticate that the tests actually ran [tests]. It lists one file with well-formed hashes, while file bytes and external delivery remain unverified [inventory]. Customer acceptance and payment are also unverified [scope].\n\nNext step  \nReconcile the row totals and provide corrected output. Independently verify the file bytes, external delivery, and actual test execution. This review is limited to internal consistency and does not authenticate source files, execution, customer acceptance, or payment [scope].",
+      "scope": "Synthetic example. AI draft for review; not proof of real delivery or payment."
+    },
+    "balanced": {
+      "case_id": "balanced",
+      "serv_called": true,
+      "endpoint": "https://inference-api.openserv.ai/v1/chat/completions",
+      "model": "gpt-5.6-luna",
+      "recorded_at": "2026-09-22T04:03:36.682532+00:00",
+      "request_id": "chatcmpl-EQm17ZPIhvcmDUZBdYOyYa2amU9Dn",
+      "usage": {
+        "prompt_tokens": 631,
+        "completion_tokens": 222,
+        "total_tokens": 853,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 73,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "review": {
+        "status": "ready_for_human_review",
+        "facts": [
+          {
+            "id": "rows",
+            "text": "Reported row counts balance: 120 input, 113 kept, 5 duplicates, 2 rejected."
+          },
+          {
+            "id": "tests",
+            "text": "The packet reports 8 of 8 tests passed. The actual test run is not authenticated by this check."
+          },
+          {
+            "id": "inventory",
+            "text": "The packet lists 1 file with well-formed hashes. File bytes and external delivery are not verified."
+          }
+        ],
+        "findings": [],
+        "scope": "Internal consistency only. Not authentication of execution, source files, customer acceptance or payment."
+      },
+      "note": "Summary\nInternal consistency review found no unresolved findings. Reported row counts balance: 120 input, 113 kept, 5 duplicates, and 2 rejected [rows]. The packet reports 8 of 8 tests passed [tests].\n\nEvidence\nThe packet lists one file with well-formed hashes [inventory]. File bytes and external delivery are not verified [inventory]. The reported test run is not authenticated by this check [tests].\n\nNext step\nConfirm the actual test execution, file bytes, and external delivery independently before treating the delivery as verified. This review covers internal consistency only; it does not authenticate execution or source files and provides no evidence of customer acceptance or payment [tests] [inventory].",
+      "scope": "Synthetic example. AI draft for review; not proof of real delivery or payment."
+    },
+    "unproven-payment": {
+      "case_id": "unproven-payment",
+      "serv_called": true,
+      "endpoint": "https://inference-api.openserv.ai/v1/chat/completions",
+      "model": "gpt-5.6-luna",
+      "recorded_at": "2026-09-22T04:03:42.324746+00:00",
+      "request_id": "chatcmpl-EQm1DWDhJbXZFBpB5y4SmEJJZAn7V",
+      "usage": {
+        "prompt_tokens": 665,
+        "completion_tokens": 219,
+        "total_tokens": 884,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 59,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "review": {
+        "status": "needs_external_confirmation",
+        "facts": [
+          {
+            "id": "rows",
+            "text": "Reported row counts balance: 120 input, 113 kept, 5 duplicates, 2 rejected."
+          },
+          {
+            "id": "tests",
+            "text": "The packet reports 8 of 8 tests passed. The actual test run is not authenticated by this check."
+          },
+          {
+            "id": "inventory",
+            "text": "The packet lists 1 file with well-formed hashes. File bytes and external delivery are not verified."
+          }
+        ],
+        "findings": [
+          {
+            "id": "external_confirmation",
+            "kind": "external",
+            "message": "Customer acceptance, delivery and payment require independent records; this packet alone cannot establish them."
+          }
+        ],
+        "scope": "Internal consistency only. Not authentication of execution, source files, customer acceptance or payment."
+      },
+      "note": "Summary  \nInternal-consistency review only; customer acceptance, delivery, and payment remain unverified [external_confirmation]. Do not treat this packet as readiness or external confirmation [scope].\n\nEvidence  \nReported counts balance: 120 input, 113 kept, 5 duplicates, and 2 rejected [rows]. The packet reports 8 of 8 tests passed, but this check does not authenticate actual test execution [tests]. One file has well-formed hashes; file bytes and external delivery are not verified [inventory].\n\nNext step  \nResolve the external confirmation finding with independent records for customer acceptance, delivery, and payment [external_confirmation]. Separately authenticate the file bytes and actual test execution; these checks cover internal consistency only and do not authenticate source files [scope].",
+      "scope": "Synthetic example. AI draft for review; not proof of real delivery or payment."
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "delivery-note/2",
+  "engine_version": "0.2.0",
+  "created_at": "2026-09-22T05:33:27.025Z",
+  "snapshot": "7e7ba85e7949f4a28a081def0a738cf9af9640474db2df634e97a4b09ed59526",
+  "objective": "交付能实际使用的报价网页：单价20，输入数量3显示¥60.00；输入SAVE10显示九折价¥54.00；数量为0时显示Quantity must be positive。不是只显示一个“成功”提示。",
+  "profile": "web",
+  "scope_confirmed": true,
+  "status": "not_proven",
+  "summary": {
+    "mandatory": 2,
+    "passed": 1,
+    "failed": 0,
+    "unverified": 1
+  },
+  "inventory": [
+    {
+      "name": "index.html",
+      "role": "deliverable",
+      "bytes": 1095,
+      "sha256": "150ad27c2697a66e83c01962a34f47c4c889a6a9e5b37c1a7459357d5f8d00e5",
+      "problem": null
+    }
+  ],
+  "contract": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "check": {
+        "type": "file_exists",
+        "file": "index.html"
+      }
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "3"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": ""
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "¥60.00"
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "layer": 1,
+      "status": "pass",
+      "evidence_ids": [
+        "E001"
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "layer": 4,
+      "status": "unverified",
+      "evidence_ids": [
+        "E002"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E001",
+      "requirement_id": "R1",
+      "layer": 1,
+      "method": "file_exists",
+      "status": "pass",
+      "observation": "Read 1095 bytes from the supplied file / 已读取实际文件字节",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "150ad27c2697a66e83c01962a34f47c4c889a6a9e5b37c1a7459357d5f8d00e5",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E002",
+      "requirement_id": "R2",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "unverified",
+      "observation": "Assertions matched, but external/backend requests were blocked; production behavior is not established.",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "150ad27c2697a66e83c01962a34f47c4c889a6a9e5b37c1a7459357d5f8d00e5",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:33:20.647715+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "action": "assert_text",
+          "selector": "#total",
+          "status": "pass"
+        }
+      ],
+      "blocked_requests": 2
+    }
+  ],
+  "layers": [
+    {
+      "level": 1,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R1"
+      ]
+    },
+    {
+      "level": 2,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 3,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 4,
+      "status": "unverified",
+      "reason": "",
+      "requirement_ids": [
+        "R2"
+      ]
+    },
+    {
+      "level": 5,
+      "status": "unverified",
+      "reason": "Mandatory criteria + confirmed scope. No guarantee beyond this contract.",
+      "requirement_ids": []
+    }
+  ],
+  "next_actions": [
+    {
+      "requirement_id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "status": "unverified",
+      "evidence_ids": [
+        "E002"
+      ]
+    }
+  ],
+  "limitations": [
+    "Conclusions apply only to these byte hashes, objective and declared acceptance criteria.",
+    "Source agreement is not independent verification of real-world truth, customer acceptance, receipt or payment.",
+    "No arbitrary code, authenticated website, production API, PDF or Office document verification is provided.",
+    "Browser execution is an isolated offline sample journey, not a security certification or complete production test."
+  ]
+}

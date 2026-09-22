@@ -1,0 +1,298 @@
+{
+  "schema_version": "delivery-note/2",
+  "engine_version": "0.2.0",
+  "created_at": "2026-09-22T05:31:38.620Z",
+  "snapshot": "d6b44f39d4230ad4646409ae9d00aceeafbe6ddf3540e0ef7fe0af37a7d76f2c",
+  "objective": "将原始订单按 order_id 去重，保留第一次出现的记录，去掉所有字段两端空格，保持顺序。应交付4笔订单，原值不得篡改；summary.json 的 total 应等于交付明细 amount 合计。",
+  "profile": "data",
+  "scope_confirmed": true,
+  "status": "criteria_satisfied",
+  "summary": {
+    "mandatory": 5,
+    "passed": 5,
+    "failed": 0,
+    "unverified": 0
+  },
+  "inventory": [
+    {
+      "name": "source.csv",
+      "role": "reference",
+      "bytes": 111,
+      "sha256": "ca39005a80a2fdce62b9d3acd84404ac9ae0cfe117b299f4b861dd6afdbd304b",
+      "problem": null
+    },
+    {
+      "name": "orders.csv",
+      "role": "deliverable",
+      "bytes": 88,
+      "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+      "problem": null
+    },
+    {
+      "name": "summary.json",
+      "role": "deliverable",
+      "bytes": 28,
+      "sha256": "0a59a66744f9fa4f87dacd2e9fdc9bfa011a757a20caac2f80577fb6e9999dfd",
+      "problem": null
+    }
+  ],
+  "contract": [
+    {
+      "id": "R1",
+      "title": "Required order columns / 订单字段完整",
+      "critical": true,
+      "check": {
+        "type": "csv_columns",
+        "file": "orders.csv",
+        "columns": [
+          "order_id",
+          "customer",
+          "amount"
+        ]
+      }
+    },
+    {
+      "id": "R2",
+      "title": "Four delivered orders / 交付4笔订单",
+      "critical": true,
+      "check": {
+        "type": "csv_row_count",
+        "file": "orders.csv",
+        "expected": 4
+      }
+    },
+    {
+      "id": "R3",
+      "title": "No repeated order IDs / 订单号不重复",
+      "critical": true,
+      "check": {
+        "type": "csv_unique",
+        "file": "orders.csv",
+        "columns": [
+          "order_id"
+        ]
+      }
+    },
+    {
+      "id": "R4",
+      "title": "Every cell matches the intended transformation / 按客户规则逐格核对",
+      "critical": true,
+      "check": {
+        "type": "csv_transform",
+        "source": "source.csv",
+        "file": "orders.csv",
+        "keys": [
+          "order_id"
+        ],
+        "trim": true,
+        "caseFold": false,
+        "unordered": false
+      }
+    },
+    {
+      "id": "R5",
+      "title": "Summary agrees with delivered amounts / 汇总与明细金额一致",
+      "critical": true,
+      "check": {
+        "type": "sum_matches_json",
+        "source": "orders.csv",
+        "column": "amount",
+        "file": "summary.json",
+        "pointer": "/total"
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "R1",
+      "title": "Required order columns / 订单字段完整",
+      "critical": true,
+      "layer": 2,
+      "status": "pass",
+      "evidence_ids": [
+        "E001"
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "Four delivered orders / 交付4笔订单",
+      "critical": true,
+      "layer": 3,
+      "status": "pass",
+      "evidence_ids": [
+        "E002"
+      ]
+    },
+    {
+      "id": "R3",
+      "title": "No repeated order IDs / 订单号不重复",
+      "critical": true,
+      "layer": 3,
+      "status": "pass",
+      "evidence_ids": [
+        "E003"
+      ]
+    },
+    {
+      "id": "R4",
+      "title": "Every cell matches the intended transformation / 按客户规则逐格核对",
+      "critical": true,
+      "layer": 3,
+      "status": "pass",
+      "evidence_ids": [
+        "E004"
+      ]
+    },
+    {
+      "id": "R5",
+      "title": "Summary agrees with delivered amounts / 汇总与明细金额一致",
+      "critical": true,
+      "layer": 3,
+      "status": "pass",
+      "evidence_ids": [
+        "E005"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E001",
+      "requirement_id": "R1",
+      "layer": 2,
+      "method": "csv_columns",
+      "status": "pass",
+      "observation": "Required columns found: order_id, customer, amount",
+      "sources": [
+        {
+          "file": "orders.csv",
+          "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E002",
+      "requirement_id": "R2",
+      "layer": 3,
+      "method": "csv_row_count",
+      "status": "pass",
+      "observation": "Parsed data records (header excluded): 4; expected: 4",
+      "sources": [
+        {
+          "file": "orders.csv",
+          "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E003",
+      "requirement_id": "R3",
+      "layer": 3,
+      "method": "csv_unique",
+      "status": "pass",
+      "observation": "Checked 4 CSV records against csv_unique on order_id",
+      "sources": [
+        {
+          "file": "orders.csv",
+          "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E004",
+      "requirement_id": "R4",
+      "layer": 3,
+      "method": "csv_transform",
+      "status": "pass",
+      "observation": "Independently recomputed from 5 source records: expected 4, delivered 4. Every output cell matches the declared trim/deduplicate-first recipe.",
+      "sources": [
+        {
+          "file": "orders.csv",
+          "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+          "role": "deliverable"
+        },
+        {
+          "file": "source.csv",
+          "sha256": "ca39005a80a2fdce62b9d3acd84404ac9ae0cfe117b299f4b861dd6afdbd304b",
+          "role": "reference"
+        }
+      ],
+      "recipe": {
+        "keys": [
+          "order_id"
+        ],
+        "trim": true,
+        "caseFold": false,
+        "unordered": false
+      }
+    },
+    {
+      "id": "E005",
+      "requirement_id": "R5",
+      "layer": 3,
+      "method": "sum_matches_json",
+      "status": "pass",
+      "observation": "Source CSV sum (amount, 4 records): 425; delivered JSON /total: 425. Source agreement, not external truth.",
+      "sources": [
+        {
+          "file": "summary.json",
+          "sha256": "0a59a66744f9fa4f87dacd2e9fdc9bfa011a757a20caac2f80577fb6e9999dfd",
+          "role": "deliverable"
+        },
+        {
+          "file": "orders.csv",
+          "sha256": "2c365c9dc654d58d3450c306efac2d19bf9d7dc441d0baf12cd22990fbf7a45c",
+          "role": "deliverable"
+        }
+      ]
+    }
+  ],
+  "layers": [
+    {
+      "level": 1,
+      "status": "pass",
+      "reason": "Hashed 3 supplied files; integrity snapshot, not origin authentication.",
+      "requirement_ids": []
+    },
+    {
+      "level": 2,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R1"
+      ]
+    },
+    {
+      "level": 3,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ]
+    },
+    {
+      "level": 4,
+      "status": "not_applicable",
+      "reason": "Declared scope is a data artifact, not a runnable application; generating code has not been executed.",
+      "requirement_ids": []
+    },
+    {
+      "level": 5,
+      "status": "pass",
+      "reason": "Mandatory criteria + confirmed scope. No guarantee beyond this contract.",
+      "requirement_ids": []
+    }
+  ],
+  "next_actions": [],
+  "limitations": [
+    "Conclusions apply only to these byte hashes, objective and declared acceptance criteria.",
+    "Source agreement is not independent verification of real-world truth, customer acceptance, receipt or payment.",
+    "No arbitrary code, authenticated website, production API, PDF or Office document verification is provided.",
+    "Browser execution is an isolated offline sample journey, not a security certification or complete production test."
+  ]
+}

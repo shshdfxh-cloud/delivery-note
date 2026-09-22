@@ -1,0 +1,375 @@
+{
+  "schema_version": "delivery-note/2",
+  "engine_version": "0.2.0",
+  "created_at": "2026-09-22T05:27:56.208Z",
+  "snapshot": "5fdd45ff2653c1e9437d4e68f84b60ec6548822e87c4c0847aacb0be1cbb0fb4",
+  "objective": "交付能实际使用的报价网页：单价20，输入数量3显示¥60.00；输入SAVE10显示九折价¥54.00；数量为0时显示Quantity must be positive。不是只显示一个“成功”提示。",
+  "profile": "web",
+  "scope_confirmed": true,
+  "status": "needs_correction",
+  "summary": {
+    "mandatory": 4,
+    "passed": 2,
+    "failed": 2,
+    "unverified": 0
+  },
+  "inventory": [
+    {
+      "name": "index.html",
+      "role": "deliverable",
+      "bytes": 915,
+      "sha256": "23ae7a44cb6870cbecffc0244e570693a06b9596eb1e60a2696159792e6809ec",
+      "problem": null
+    }
+  ],
+  "contract": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "check": {
+        "type": "file_exists",
+        "file": "index.html"
+      }
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "3"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": ""
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "¥60.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R3",
+      "title": "Discount actually changes the price / 优惠码实际生效",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "3"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": "SAVE10"
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "¥54.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R4",
+      "title": "Reject invalid quantity / 拒绝无效数量",
+      "critical": true,
+      "check": {
+        "type": "browser_flow",
+        "entry": "index.html",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#quantity",
+            "value": "0"
+          },
+          {
+            "action": "fill",
+            "selector": "#code",
+            "value": ""
+          },
+          {
+            "action": "click",
+            "selector": "#calculate"
+          },
+          {
+            "action": "assert_text",
+            "selector": "#total",
+            "value": "Quantity must be positive"
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "R1",
+      "title": "Usable HTML entry / HTML入口已交付",
+      "critical": true,
+      "layer": 1,
+      "status": "pass",
+      "evidence_ids": [
+        "E001"
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "Regular quote / 正常数量报价",
+      "critical": true,
+      "layer": 4,
+      "status": "pass",
+      "evidence_ids": [
+        "E002"
+      ]
+    },
+    {
+      "id": "R3",
+      "title": "Discount actually changes the price / 优惠码实际生效",
+      "critical": true,
+      "layer": 4,
+      "status": "fail",
+      "evidence_ids": [
+        "E003"
+      ]
+    },
+    {
+      "id": "R4",
+      "title": "Reject invalid quantity / 拒绝无效数量",
+      "critical": true,
+      "layer": 4,
+      "status": "fail",
+      "evidence_ids": [
+        "E004"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E001",
+      "requirement_id": "R1",
+      "layer": 1,
+      "method": "file_exists",
+      "status": "pass",
+      "observation": "Read 915 bytes from the supplied file / 已读取实际文件字节",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "23ae7a44cb6870cbecffc0244e570693a06b9596eb1e60a2696159792e6809ec",
+          "role": "deliverable"
+        }
+      ]
+    },
+    {
+      "id": "E002",
+      "requirement_id": "R2",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "pass",
+      "observation": "Executed 4 actual browser steps including outcome assertions. Fresh profile, uploaded assets only, no outside network.",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "23ae7a44cb6870cbecffc0244e570693a06b9596eb1e60a2696159792e6809ec",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:45.900967+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "action": "assert_text",
+          "selector": "#total",
+          "status": "pass"
+        }
+      ],
+      "blocked_requests": 0
+    },
+    {
+      "id": "E003",
+      "requirement_id": "R3",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "fail",
+      "observation": "Browser journey did not establish the required outcome: Locator expected to have text '¥54.00'\nActual value: ¥60.00",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "23ae7a44cb6870cbecffc0244e570693a06b9596eb1e60a2696159792e6809ec",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:46.259388+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "status": "fail"
+        }
+      ],
+      "blocked_requests": 0
+    },
+    {
+      "id": "E004",
+      "requirement_id": "R4",
+      "layer": 4,
+      "method": "browser_flow",
+      "status": "fail",
+      "observation": "Browser journey did not establish the required outcome: Locator expected to have text 'Quantity must be positive'\nActual value: ¥0.00",
+      "sources": [
+        {
+          "file": "index.html",
+          "sha256": "23ae7a44cb6870cbecffc0244e570693a06b9596eb1e60a2696159792e6809ec",
+          "role": "deliverable"
+        }
+      ],
+      "runner": "isolated-browser-offline",
+      "executed_at": "2026-09-22T05:27:48.411971+00:00",
+      "steps": [
+        {
+          "step": 1,
+          "action": "fill",
+          "selector": "#quantity",
+          "status": "pass"
+        },
+        {
+          "step": 2,
+          "action": "fill",
+          "selector": "#code",
+          "status": "pass"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "selector": "#calculate",
+          "status": "pass"
+        },
+        {
+          "step": 4,
+          "status": "fail"
+        }
+      ],
+      "blocked_requests": 0
+    }
+  ],
+  "layers": [
+    {
+      "level": 1,
+      "status": "pass",
+      "reason": "",
+      "requirement_ids": [
+        "R1"
+      ]
+    },
+    {
+      "level": 2,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 3,
+      "status": "not_checked",
+      "reason": "",
+      "requirement_ids": []
+    },
+    {
+      "level": 4,
+      "status": "fail",
+      "reason": "",
+      "requirement_ids": [
+        "R2",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "level": 5,
+      "status": "fail",
+      "reason": "Mandatory criteria + confirmed scope. No guarantee beyond this contract.",
+      "requirement_ids": []
+    }
+  ],
+  "next_actions": [
+    {
+      "requirement_id": "R3",
+      "title": "Discount actually changes the price / 优惠码实际生效",
+      "status": "fail",
+      "evidence_ids": [
+        "E003"
+      ]
+    },
+    {
+      "requirement_id": "R4",
+      "title": "Reject invalid quantity / 拒绝无效数量",
+      "status": "fail",
+      "evidence_ids": [
+        "E004"
+      ]
+    }
+  ],
+  "limitations": [
+    "Conclusions apply only to these byte hashes, objective and declared acceptance criteria.",
+    "Source agreement is not independent verification of real-world truth, customer acceptance, receipt or payment.",
+    "No arbitrary code, authenticated website, production API, PDF or Office document verification is provided.",
+    "Browser execution is an isolated offline sample journey, not a security certification or complete production test."
+  ]
+}
