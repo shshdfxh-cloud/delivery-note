@@ -1,0 +1,20 @@
+{
+  "base": "http://127.0.0.1:3103/",
+  "checks": [
+    "Chinese-first homepage; technical controls stay hidden until needed",
+    "Complete language switch persists across reload",
+    "Recorded SERV result revalidated: 10 vs 12, four findings, one evidence gap",
+    "English report presentation switches; verbatim Chinese evidence is unchanged",
+    "Actual downloads: Chinese and English Markdown plus unmodified evidence JSON",
+    "No horizontal overflow at 320, 390, 768, 1024 and 1707 CSS pixels",
+    "Real file picker, reference roles, replace confirmation, consent and package preparation",
+    "Forged citation rejected; valid response imported; changed objective invalidates report and export",
+    "Unsupported binary format rejected without losing existing files",
+    "Companion checks page still runs real data checks and supports both languages on mobile",
+    "Local queue UI: one consented job, polling and result (test double; no SERV call)",
+    "No JavaScript exceptions or provider POST requests"
+  ],
+  "javascript_errors": [],
+  "external_posts": [],
+  "note": "Browser UI verification using recorded model material; no fresh SERV inference or credit spend."
+}

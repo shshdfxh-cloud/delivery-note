@@ -50,3 +50,7 @@ This confirms a public amendment, **not** an edited Typeform record or organizer
 ## Integrated existing live handoff evidence
 
 The existing repository also gained commit `67bd817`, containing the connected-assistant UI/job → signed-in SERV → returned response → visible report record and its validation against the consolidated engine. This was merged without rewriting either branch. See `AGENT_REVIEW.md` and `verification/live-agent-*.json`; this is not an API attestation or a claim that a standalone static page can control a signed-in website without an assistant.
+
+## Interface refinement — same submission
+
+The 22 September UI refinement separates Chinese and English, makes the review steps and evidence report readable on desktop and mobile, and updates the report screenshot. Choose English in the header and click “Run the example”, or use the Chinese “运行示例”. No duplicate submission, new model claim or new X post is implied. See UI_REVIEW.md for the actual validation scope.

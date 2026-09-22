@@ -17,6 +17,7 @@ from .goal_serv import propose, explain, call_serv
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / 'web'
 ASSETS = {
+    '/review-ui.mjs': ('review-ui.mjs', 'text/javascript; charset=utf-8'),
     "/checks.html": ("checks.html", "text/html; charset=utf-8"),
     '/general-engine.mjs': ('general-engine.mjs', 'text/javascript; charset=utf-8'),
     '/semantic-recording.json': ('semantic-recording.json', 'application/json'),

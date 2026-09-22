@@ -1,7 +1,107 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>Delivery Note · General delivery audit</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="general-review.css"></head><body>
-<header class="topbar"><a class="brand" href="./">delivery note</a><nav><a href="checks.html">数据与运行检查 / Data & runtime</a><a href="https://console.openserv.ai/playground" target="_blank" rel="noreferrer">打开已登录的模型网页 ↗</a><a href="https://github.com/shshdfxh-cloud/delivery-note" target="_blank" rel="noreferrer">GitHub ↗</a><a href="legacy/">Original demo</a></nav></header>
-<main><section class="hero"><div><div class="eyebrow">GENERAL DELIVERY AUDIT · SERV REASONING</div><h1>Review the outcome.<br>Trace the evidence.</h1><p class="lede">从客户目的审查文档、数据、代码与流程材料；本机实测与AI判断分开记录。<br>Customer objective → measured file facts → SERV review → exact citation checks → evidence report. Try the recorded SERV example, or review your own files through a signed-in model page. The local agent handoff connects to your existing AI assistant and signed-in SERV browser. No keys are extracted. An assistant with browser tools must process the queued job.</p></div><aside class="principle"><strong>Evidence before acceptance.<br>有依据，才谈验收。</strong><p>文件可读不等于内容正确；材料一致不等于现实事实；AI说运行成功不等于实际运行。</p></aside></section>
-<section class="panel demo-entry"><h2>Try the revised project / 体验修改版</h2><p>12 people are claimed complete. The actual CSV has 10 completed and 2 pending. Does the handoff meet the customer goal?</p><button id="replay" class="primary">Run recorded SERV example · 实际重验材料与引用</button><p id="recording-state" class="hint" role="status"></p><p class="hint">The model response is recorded; local file counts and citation checks run afresh. No key, account or upload is needed for this example.</p></section><div class="general-grid"><section class="panel"><h2>01 · Objective & materials / 目的与材料</h2><button id="sample" class="secondary">载入非网页示例：培训交付报告</button><label for="objective">客户最终要什么？</label><textarea id="objective" rows="4" maxlength="4000"></textarea><label class="upload-button" for="files-input">选择材料文件</label><input id="files-input" type="file" multiple accept=".txt,.md,.csv,.json,.html,.js,.py,.ts,.css,.xml,.yaml,.yml,.log"><p class="hint">最多12个UTF-8文本文件、共120,000字节。代码只作为文本阅读，绝不执行。资料不会自动上传。</p><div id="files"></div><label class="consent"><input id="consent" type="checkbox">我确认这批完整文字可以交给所选模型；发送前会查看预览。材料可能受该平台的数据政策约束。</label><button id="build" class="primary">整理通用审查包</button></section>
-<section class="panel"><h2>02 · SERV review / 审查</h2><p>下面的审查包包含目的、材料全文、行号和文件指纹。复制到已登录的模型网页提交，随后复制模型的完整JSON回复回来。</p><label for="prompt">审查包预览（完整发送内容）</label><textarea id="prompt" rows="12" readonly></textarea><button id="copy" class="secondary" disabled>复制审查包</button><button id="save-packet" class="secondary" disabled>保存审查包</button><p id="packet-state" role="status" class="hint"></p><label for="response">模型完整JSON回复</label><textarea id="response" rows="9" spellcheck="false"></textarea><button id="import" class="primary" disabled>Validate response / 核对引用</button><label class="consent"><input id="general-runtime" type="checkbox">可选：独立离线检查器实际运行模型提出的静态网页步骤；不使用个人登录态，不执行任意程序。</label><button id="live" class="secondary" hidden>Live local SERV review / 本地实时审查</button></section></div>
-<p id="error" role="alert" class="hint"></p><section class="panel"><h2>Measured locally / 本机实测</h2><p>Actual byte hashes, CSV rows and low-cardinality value counts, JSON structure. These observations do not authenticate the real-world source.</p><pre id="measured"></pre></section><section id="report" class="panel" hidden aria-live="polite"><h2>03 · Findings & evidence / 审查报告</h2><div id="decision" class="decision"></div><p id="summary"></p><div id="results"></div><details><summary>机器核对了什么、没有核对什么</summary><pre id="verification"></pre></details><button id="download-json" class="secondary">Evidence JSON / 下载证据</button><button id="download-md" class="secondary">Markdown report / 下载报告</button></section>
-<section class="panel"><h3>这个入口的边界</h3><p>已实现：通用目的和文本材料打包、AI返回建议导入、逐条目标片段/文件/行号/逐字引文核对、旧材料结果拒收。本地模式可把任务交给现有AI助手，由助手通过已登录SERV网页提交并取回结果；项目再自动核对与出报告。须用start-browser-review.cmd明确启用，并有能操作浏览器的AI助手接手；页面自身不能跨站控制SERV。纯静态网站支持本机检查、真实录制回放及手动转交，不会假称正在调用模型。两者都不自动证明目标覆盖完整、认证材料来源或执行任意程序。相关执行证据应由对应检查工具另行提供，不会把模型文字冒充实测。</p></section></main><script type="module" src="general-review.mjs"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从客户目的出发，审查交付成果中的矛盾、证据缺口和真实检查结果。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Delivery Note · 通用交付审查</title>
+  <link rel="stylesheet" href="general-review.css?v=20260922-ui1">
+</head>
+<body>
+<a class="skip-link" href="#workspace" data-i18n="skip">跳到审查工作台</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">dn<span>.</span></span><span>Delivery Note<small data-i18n="brandSub">通用交付审查</small></span></a>
+    <nav aria-label="主导航" data-i18n-aria="navigation">
+      <a href="#workspace" class="nav-current" data-i18n="workspaceNav">审查工作台</a>
+      <a href="checks.html" data-i18n="checksNav">数据与运行检查</a>
+      <a href="https://github.com/shshdfxh-cloud/delivery-note" target="_blank" rel="noreferrer" class="github-link">GitHub ↗</a>
+      <button id="language" class="language" type="button" aria-label="Switch to English">EN</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="small-dot"></span><span data-i18n="eyebrow">从客户目的出发，而不是交付方的自述</span></p>
+      <h1 id="hero-title"><span data-i18n="hero1">交付了，</span><br><em data-i18n="hero2">真的做到了吗？</em></h1>
+      <p class="lede" data-i18n="lede">把客户目的、交付成果和依据放在一起。找出矛盾与证据缺口，让每一项结论都有出处。</p>
+      <a class="text-link" href="#workspace" data-i18n="startOwn">审查自己的交付物 ↓</a>
+    </div>
+    <aside class="purpose-card" aria-label="审查路径" data-i18n-aria="pathLabel">
+      <p class="section-kicker" data-i18n="pathTitle">从目的到证据</p>
+      <div class="path-item"><span>01</span><div><strong data-i18n="path1">客户到底要什么</strong><p data-i18n="path1Body">拆清目的、条件和不能遗漏的要求。</p></div></div>
+      <div class="path-item"><span>02</span><div><strong data-i18n="path2">材料能证明什么</strong><p data-i18n="path2Body">核对原文，独立计算可以测量的结果。</p></div></div>
+      <div class="path-item"><span>03</span><div><strong data-i18n="path3">还有哪些没有做到</strong><p data-i18n="path3Body">区分已发现的问题和仍待补齐的证据。</p></div></div>
+    </aside>
+  </section>
+
+  <section class="demo-band" aria-labelledby="demo-title">
+    <div class="demo-copy"><span class="tag" data-i18n="sampleTag">合成案例 · 培训报告</span><h2 id="demo-title" data-i18n="sampleTitle">报告说 12 人完成，记录却只有 10 人。</h2><p data-i18n="sampleBody">使用已录制的真实 SERV 回复；每次重新计算文件并核对引用。不消耗模型额度。</p></div>
+    <button id="replay" class="button primary" type="button" data-i18n="runSample">运行示例 →</button>
+  </section>
+  <p id="recording-state" class="run-note" role="status" hidden></p>
+
+  <section id="workspace" class="workspace" aria-labelledby="workspace-title">
+    <div class="workspace-heading"><div><p class="section-kicker" data-i18n="workKicker">你的交付，逐项审查</p><h2 id="workspace-title" data-i18n="workTitle">交付审查工作台</h2></div><span id="mode" class="mode-badge"></span></div>
+    <ol class="stepper" aria-label="操作步骤" data-i18n-aria="stepperLabel"><li id="step-1" aria-current="step"><span>1</span><b data-i18n="step1">目的与材料</b></li><li id="step-2"><span>2</span><b data-i18n="step2">模型审查</b></li><li id="step-3"><span>3</span><b data-i18n="step3">结论与证据</b></li></ol>
+    <div id="error" class="error-box" role="alert" tabindex="-1" hidden></div>
+    <div class="work-grid">
+      <section class="card inputs-card" aria-labelledby="inputs-title">
+        <div class="card-heading"><h3 id="inputs-title" data-i18n="inputsTitle">客户目的与材料</h3><button id="reset" class="text-button" type="button" data-i18n="clear">清空</button></div>
+        <div class="label-row"><label for="objective" data-i18n="objectiveLabel">最终希望实现什么？</label><span id="char-count" class="muted">0 / 4000</span></div>
+        <textarea id="objective" rows="4" maxlength="4000" data-i18n-placeholder="objectivePlaceholder" placeholder="例如：核对培训报告是否有依据；未完成者须有负责人和限期内的补训安排。"></textarea>
+        <div class="label-row file-label"><span class="field-label" data-i18n="filesLabel">交付成果和原始依据</span><span id="file-count" class="muted"></span></div>
+        <div id="dropzone" class="dropzone"><span class="upload-icon" aria-hidden="true">↑</span><strong data-i18n="uploadTitle">点击选择，或拖入文件</strong><span data-i18n="uploadHint">文本、Markdown、CSV、JSON 和代码文件</span><input id="files-input" type="file" multiple accept=".txt,.md,.csv,.json,.html,.htm,.js,.mjs,.py,.ts,.css,.xml,.yaml,.yml,.log" aria-label="选择材料文件" data-i18n-aria="uploadTitle"></div>
+        <p class="helper" data-i18n="fileLimits">最多 12 个文本文件，共 120 KB。PDF、Office 和压缩包暂不支持。</p>
+        <div id="files" class="file-list"></div>
+        <p id="files-empty" class="empty-files" data-i18n="filesEmpty">还没有材料。选择文件后，可标记“交付成果”或“原始依据”。</p>
+        <p class="helper role-help" data-i18n="roleHelp">交付成果是待审查的结果；原始依据用于核对。文件不会自动上传。</p>
+        <button id="sample" class="text-button sample-load" type="button" data-i18n="loadSample">使用示例材料填写</button>
+        <label class="consent-row"><input id="consent" type="checkbox"><span data-i18n="consent">我确认这些完整材料可以交给所选模型。整理后会先显示发送预览，不会自动上传。</span></label>
+        <button id="build" class="button primary full" type="button" data-i18n="build">准备审查 →</button>
+        <p class="helper centered" data-i18n="privacyNote">材料只保存在当前页面内存中；刷新前请导出所需结果。</p>
+      </section>
+
+      <div class="review-column">
+        <section class="card output-card" aria-label="审查与报告" data-i18n-aria="outputLabel">
+          <div class="view-switch" role="tablist" aria-label="查看内容" data-i18n-aria="tabsLabel"><button id="tab-review" type="button" role="tab" aria-controls="review-view" aria-selected="true" data-i18n="reviewTab">审查操作</button><button id="tab-report" type="button" role="tab" aria-controls="report-view" aria-selected="false" tabindex="-1"><span data-i18n="reportTab">证据报告</span><span id="report-dot" class="report-dot" hidden></span></button></div>
+          <div id="review-view" role="tabpanel" aria-labelledby="tab-review">
+            <div id="review-empty" class="empty-state"><div class="empty-document" aria-hidden="true"><i></i><i></i><i></i><span>?</span></div><h3 data-i18n="readyTitle">先把“完成”定义清楚。</h3><p data-i18n="readyBody">填写客户目的并选择材料，再点击“准备审查”。这里会告诉你如何交给模型，以及怎样取回可核对的报告。</p><div class="empty-tags"><span data-i18n="empty1">目的拆解</span><span data-i18n="empty2">原文依据</span><span data-i18n="empty3">实际检查</span></div></div>
+            <div id="handoff" class="handoff" hidden>
+              <div class="card-heading"><h3 data-i18n="handoffTitle">把这批材料交给模型</h3><span class="tag subtle" data-i18n="previewTag">发送前可预览</span></div>
+              <div id="live-section" class="live-section" hidden><p id="live-description" class="helper"></p><label id="runtime-option" class="consent-row"><input id="general-runtime" type="checkbox"><span data-i18n="runtimeConsent">允许独立离线浏览器执行模型提出的静态网页检查，不使用个人登录态。</span></label><button id="live" class="button primary full" type="button"></button><p class="helper" data-i18n="orManual">也可以使用下方手动转交。</p></div>
+              <p id="handoff-description" class="helper" data-i18n="manualDescription">公开页不会自动调用模型。按以下步骤转交材料，回复导回后会重新核对原文并执行支持的检查。</p>
+              <ol class="handoff-steps"><li><b>1</b><span data-i18n="copyStep">复制审查包</span></li><li><b>2</b><span data-i18n="sendStep">在 SERV 网页提交</span></li><li><b>3</b><span data-i18n="returnStep">把完整回复贴回来</span></li></ol>
+              <details id="preview-details" class="disclosure"><summary data-i18n="previewLabel">查看将发送的完整内容</summary><label for="prompt" class="helper" data-i18n="previewHelp">包含客户目的、材料全文、文件指纹及检查格式。此处显示实际发送文本。</label><textarea id="prompt" rows="9" readonly spellcheck="false"></textarea><button id="save-packet" class="text-button" type="button" data-i18n="savePacket">保存审查包</button></details>
+              <div class="button-row"><button id="copy" class="button secondary" type="button" data-i18n="copy">复制审查包</button><a class="button secondary" href="https://console.openserv.ai/playground" target="_blank" rel="noreferrer" data-i18n="openServ">打开 SERV ↗</a></div>
+              <label for="response" class="response-label" data-i18n="responseLabel">粘贴模型的完整 JSON 回复</label><textarea id="response" rows="6" spellcheck="false" data-i18n-placeholder="responsePlaceholder" placeholder="在模型网页复制完整回复并粘贴到这里。不要只复制摘要。"></textarea>
+              <button id="import" class="button primary full" type="button" data-i18n="import">核对并生成报告 →</button>
+            </div>
+            <p id="packet-state" class="status-note" role="status" hidden></p>
+          </div>
+          <div id="report-view" role="tabpanel" aria-labelledby="tab-report" hidden>
+            <div id="report-empty" class="empty-state"><div class="empty-document" aria-hidden="true"><i></i><i></i><i></i></div><h3 data-i18n="reportEmptyTitle">报告会在这里出现。</h3><p data-i18n="reportEmptyBody">先运行上方示例，或完成自己的审查。每项发现都会附上对应目的、依据和下一步。</p></div>
+            <section id="report" class="report-content" hidden aria-label="审查报告" data-i18n-aria="reportTab">
+              <div class="report-topline"><span class="section-kicker" data-i18n="reportKicker">审查结果</span><span id="provenance-label" class="tag subtle"></span></div>
+              <div id="decision" class="decision"></div><div id="stats" class="report-stats"></div><p id="summary" class="report-summary"></p>
+              <p id="translation-note" class="helper" hidden></p>
+              <div class="report-actions"><button id="download-md" class="button secondary" type="button" data-i18n="downloadMd">下载报告</button><button id="download-json" class="button quiet" type="button" data-i18n="downloadJson">导出证据 JSON</button></div>
+              <div id="results" class="findings"></div>
+              <div class="scope-box"><strong data-i18n="scopeTitle">结论到哪里为止</strong><p data-i18n="scopeBody">引文一致不代表来源真实；局部检查通过不代表全部目的已实现。未实际执行的内容，不会被算成已经运行。</p></div>
+              <details class="disclosure technical"><summary data-i18n="technicalLabel">完整核验记录与能力限制</summary><p class="helper" data-i18n="technicalHelp">以下为未改写的机器记录，保留原始字段、语言和模型说明。</p><pre id="verification"></pre></details>
+            </section>
+          </div>
+        </section>
+        <details id="measured-wrap" class="card measured-card" hidden><summary><span data-i18n="measuredTitle">独立文件检查</span><span id="measured-count" class="muted"></span></summary><p class="helper" data-i18n="measuredHelp">从实际材料解析出的记录数、结构与状态分布，不是模型自报的结果。</p><div id="measured"></div></details>
+      </div>
+    </div>
+  </section>
+  <section class="scope-footer"><div><h2 data-i18n="boundaryTitle">通用的审查思路，明确的验证范围。</h2><p data-i18n="boundaryBody">当前支持文本内容、数据及部分静态网页检查。代码可阅读，但不执行任意程序；生产系统、外部事实和 PDF / Office 尚未纳入完整验证。</p></div><a class="text-link" href="checks.html" data-i18n="boundaryLink">查看数据与运行检查 →</a></section>
+</main>
+<footer><span>Delivery Note <span class="muted">· SERV Reasoning</span></span><div><span data-i18n="footer">少一点“已经完成”，多一点可追溯的证据。</span><a href="legacy/" data-i18n="archive">历史版本</a></div></footer>
+<noscript>此审查工具需要 JavaScript。请启用后刷新；材料不会自动上传。 / JavaScript is required to run the checks.</noscript>
+<script type="module" src="general-review.mjs?v=20260922-ui1"></script>
+</body>
+</html>

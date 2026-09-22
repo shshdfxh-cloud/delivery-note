@@ -1,5 +1,11 @@
 # Delivery Note · Outcome acceptance
 
+## Interface refresh — 22 September
+
+The same demo now has a Chinese-first interface with a separate English switch, responsive material/review/report panels, readable findings and localized Markdown downloads. Source quotations and evidence JSON remain unmodified. The prompt and machine records are available on demand instead of dominating the page. Click **运行示例** (Chinese) or **Run the example** (English); this rechecks the real recorded SERV case, not a new model request.
+
+Browser interaction and desktop/mobile checks are documented in [UI_REVIEW.md](UI_REVIEW.md). This refresh does not broaden the underlying verification scope or create a new contest entry.
+
 **Not just “is there a deliverable?” — “does the evidence support the customer's objective?”**
 
 A goal-driven acceptance workbench built with SERV Reasoning. AI proposes an explicit acceptance contract and explains gaps. A deterministic engine checks actual bytes; an optional fresh, offline browser executes real user journeys. AI never controls the authoritative verdict.
@@ -16,7 +22,7 @@ See [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md) for the fixed product goal, current bou
 
 The main demo now starts with **customer-purpose review of actual documents, data and code-as-text**, rather than the old synthetic-count handoff message. The previous deterministic data/web workbench remains at `checks.html`; the original SERV recordings remain at `legacy/`. Existing repository, demo and contest entry URLs are preserved.
 
-**Try the main demo:** click “Run recorded SERV example”. Actual file parsing, 10 completed / 2 pending counts, exact goal/line quotation validation and the model-selected bounded count check run anew. The SERV response itself is a clearly labelled real browser recording, not a new inference request. It identifies the false completion claim, missing follow-up ownership/schedule, and unsupported execution/acceptance claims.
+**Try the main demo:** click “Run the example” (or “运行示例”). Actual file parsing, 10 completed / 2 pending counts, exact goal/line quotation validation and the model-selected bounded count check run anew. The SERV response itself is a clearly labelled real browser recording, not a new inference request. It identifies the false completion claim, missing follow-up ownership/schedule, and unsupported execution/acceptance claims.
 
 For a new delivery, enter the goal, select reference and deliverable text files, inspect the full-material prompt and explicitly consent. The same engine accepts the model's structured audit, rejects altered quotations or stale packets, executes supported data checks, and exports a report with objective → criteria → source evidence → measured findings. Semantic support and measured tests are shown separately: passing a narrow test cannot prove an entire business purpose.
 
