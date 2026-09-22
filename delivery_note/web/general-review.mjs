@@ -5,8 +5,8 @@ import {tr,WORDS,modelText,checkText,sourceMode,isSampleReport,exportMarkdown} f
 const $=id=>document.getElementById(id);
 const node=(tag,text,className)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(className)el.className=className;return el;};
 const enc=new TextEncoder();
-let lang='zh';try{lang=new URL(location.href).searchParams.get('lang')||localStorage.getItem('delivery-note-language')||'zh';}catch{}if(!['zh','en'].includes(lang))lang='zh';
-let docs=[],prepared=null,report=null,generation=0,busy=false,capabilities={},sampleMode=false;
+let lang='en';try{lang=new URL(location.href).searchParams.get('lang')||localStorage.getItem('delivery-note-language-v2')||'en';}catch{}if(!['zh','en'].includes(lang))lang='en';
+let docs=[],prepared=null,report=null,generation=0,busy=false,capabilities={},sampleMode=false,sampleData=null;
 let waitCancelled=false;
 let currentTab='review',notice=null,errorInfo=null,recordingInfo=null,currentFacts=[],controller=null,pendingJob=null;
 const t=(k,v)=>tr(lang,k,v);
@@ -55,8 +55,8 @@ function renderFiles(){
   const row=node('div',undefined,'document-row'),info=node('div',undefined,'file-info');
   info.append(node('span',d.name,'file-name'),node('span',t('bytes',{n:enc.encode(d.content).length.toLocaleString()}),'file-size'));
   const role=node('select');for(const value of ['reference','deliverable']){const o=node('option',t(value));o.value=value;role.append(o);}role.value=d.role;role.disabled=busy;role.setAttribute('aria-label',t('fileRole',{name:d.name}));
-  role.addEventListener('change',()=>{d.role=role.value;sampleMode=false;invalidate();});
-  const remove=node('button','×','remove');remove.type='button';remove.disabled=busy;remove.title=t('remove',{name:d.name});remove.setAttribute('aria-label',remove.title);remove.addEventListener('click',()=>{docs.splice(i,1);sampleMode=false;invalidate();renderFiles();});
+  role.addEventListener('change',()=>{d.role=role.value;sampleMode=false;sampleData=null;invalidate();});
+  const remove=node('button','×','remove');remove.type='button';remove.disabled=busy;remove.title=t('remove',{name:d.name});remove.setAttribute('aria-label',remove.title);remove.addEventListener('click',()=>{docs.splice(i,1);sampleMode=false;sampleData=null;invalidate();renderFiles();});
   row.append(node('span',d.name.split('.').pop().toUpperCase().slice(0,4),'file-icon'),info,role,remove);$('files').append(row);
  }
  controls();
@@ -93,7 +93,8 @@ function display(r){
  renderFacts(r.material_observations||[]);controls();
 }
 function renderLanguage(){
- document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.title='Delivery Note · '+(lang==='zh'?'通用交付审查':'General delivery review');
+ document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+ if(sampleMode&&sampleData){$('objective').value=lang==='en'?(sampleData.objective_en||sampleData.objective):sampleData.objective;}document.title='Delivery Note · '+(lang==='zh'?'通用交付审查':'General delivery review');
  for(const el of document.querySelectorAll('[data-i18n]'))el.textContent=t(el.dataset.i18n);
  for(const el of document.querySelectorAll('[data-i18n-placeholder]'))el.placeholder=t(el.dataset.i18nPlaceholder);
  for(const el of document.querySelectorAll('[data-i18n-aria]'))el.setAttribute('aria-label',t(el.dataset.i18nAria));
@@ -105,7 +106,7 @@ async function asset(name){const r=await fetch(name,{cache:'no-store'});if(!r.ok
 function confirmReplace(){return !(docs.length||$('objective').value.trim())||sampleMode||confirm(t('confirmReplace'));}
 async function loadSample(replay=false){
  if(busy||!confirmReplace())return;invalidate(null);setBusy(true);const version=generation;
- try{const s=await asset('semantic-sample.json');if(version!==generation)return;docs=structuredClone(s.documents);$('objective').value=s.objective;sampleMode=true;$('consent').checked=false;renderFiles();
+ try{const s=await asset('semantic-sample.json');if(version!==generation)return;sampleData=s;docs=structuredClone(s.documents);$('objective').value=lang==='en'?(s.objective_en||s.objective):s.objective;sampleMode=true;$('consent').checked=false;renderFiles();
   if(replay){const record=await asset('semantic-recording.json');const result=await evaluateGeneral(s.objective,s.documents,record.response);if(version!==generation)return;
    result.report.provenance={...result.report.provenance,mode:'recorded-serv-browser-response',model:record.model,recorded_at:record.recorded_at,recording_capture:record.capture,serv_called_this_run:false};
    display(result.report);recordingInfo={date:record.recorded_at};$('recording-state').textContent=t('recordedNote',recordingInfo);$('recording-state').hidden=false;selectTab('report',true);
@@ -117,28 +118,28 @@ async function upload(list){
  try{
   if(docs.length+list.length>REVIEW_LIMITS.files||docs.reduce((n,d)=>n+enc.encode(d.content).length,0)+list.reduce((n,f)=>n+f.size,0)>REVIEW_LIMITS.bytes)throw Error('errLimit');
   const additions=[];for(const f of list){if(!/\.(txt|md|csv|json|html?|js|mjs|py|ts|css|xml|ya?ml|log)$/i.test(f.name)||!f.size)throw Error('errType');const content=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(await f.arrayBuffer());additions.push({name:f.name,role:'deliverable',content});}
-  const candidate=[...docs,...additions];await prepareGeneral($('objective').value||'Pending customer objective',candidate);if(version!==generation)return;docs=candidate;sampleMode=false;selectTab('review');renderFiles();
+  const candidate=[...docs,...additions];await prepareGeneral($('objective').value||'Pending customer objective',candidate,lang);if(version!==generation)return;docs=candidate;sampleMode=false;sampleData=null;selectTab('review');renderFiles();
  }catch(e){showError(e);}finally{$('files-input').value='';setBusy(false);}
 }
 function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type})),a=node('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
-$('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('delivery-note-language',lang);const url=new URL(location.href);if(url.searchParams.has('lang')){url.searchParams.set('lang',lang);history.replaceState(null,'',url);}}catch{}renderLanguage();});
+$('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('delivery-note-language-v2',lang);const url=new URL(location.href);if(url.searchParams.has('lang')){url.searchParams.set('lang',lang);history.replaceState(null,'',url);}}catch{}renderLanguage();});
 for(const name of ['review','report']){$('tab-'+name).addEventListener('click',()=>selectTab(name));$('tab-'+name).addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?'review':e.key==='End'?'report':name==='review'?'report':'review';selectTab(next);$('tab-'+next).focus();}});}
 $('replay').addEventListener('click',()=>loadSample(true));$('sample').addEventListener('click',()=>loadSample(false));
-$('reset').addEventListener('click',()=>{if(busy||!confirmReplace())return;docs=[];$('objective').value='';$('consent').checked=false;$('general-runtime').checked=false;sampleMode=false;invalidate(null);renderFiles();selectTab('review');});
-$('objective').addEventListener('input',()=>{sampleMode=false;invalidate();});$('consent').addEventListener('change',()=>invalidate());
+$('reset').addEventListener('click',()=>{if(busy||!confirmReplace())return;docs=[];$('objective').value='';$('consent').checked=false;$('general-runtime').checked=false;sampleMode=false;sampleData=null;invalidate(null);renderFiles();selectTab('review');});
+$('objective').addEventListener('input',()=>{sampleMode=false;sampleData=null;invalidate();});$('consent').addEventListener('change',()=>invalidate());
 $('general-runtime').addEventListener('change',()=>resetReport());
 $('files-input').addEventListener('change',e=>upload(Array.from(e.target.files)));
 for(const event of ['dragover','dragenter'])$('dropzone').addEventListener(event,e=>{e.preventDefault();if(!busy)$('dropzone').classList.add('dragging');});
 for(const event of ['dragleave','drop'])$('dropzone').addEventListener(event,e=>{e.preventDefault();$('dropzone').classList.remove('dragging');if(event==='drop')upload(Array.from(e.dataTransfer.files));});
 $('build').addEventListener('click',async()=>{
  if(busy)return;invalidate(null);const version=generation;setBusy(true);
- try{if(!$('objective').value.trim())throw Error('errGoal');if(!docs.some(d=>d.role==='deliverable'))throw Error('errFiles');if(!$('consent').checked)throw Error('errConsent');const candidate=await prepareGeneral($('objective').value,docs);if(version!==generation)return;prepared=candidate;$('prompt').value=candidate.prompt;renderFacts(candidate.facts);setNotice('preparedNote');selectTab('review',true);}catch(e){showError(e);}finally{setBusy(false);}
+ try{if(!$('objective').value.trim())throw Error('errGoal');if(!docs.some(d=>d.role==='deliverable'))throw Error('errFiles');if(!$('consent').checked)throw Error('errConsent');const candidate=await prepareGeneral($('objective').value,docs,lang);if(version!==generation)return;prepared=candidate;$('prompt').value=candidate.prompt;renderFacts(candidate.facts);setNotice('preparedNote');selectTab('review',true);}catch(e){showError(e);}finally{setBusy(false);}
 });
 $('copy').addEventListener('click',async()=>{if(!prepared||busy)return;try{await navigator.clipboard.writeText($('prompt').value);setNotice('copied');}catch{$('preview-details').open=true;$('prompt').focus();$('prompt').select();setNotice('copyFallback');}});
 $('save-packet').addEventListener('click',()=>{if(prepared)download('delivery-review-packet.json',JSON.stringify(prepared.packet,null,2),'application/json');});
 $('import').addEventListener('click',async()=>{
  if(!prepared||busy)return;resetReport(null);const version=generation;setBusy(true);
- try{if(!$('response').value.trim())throw Error('errJSON');const out=await evaluateGeneral(prepared.packet.objective,docs,$('response').value);if(version!==generation)return;display(out.report);setNotice('complete');selectTab('report',true);}catch(e){showError(e);}finally{setBusy(false);}
+ try{if(!$('response').value.trim())throw Error('errJSON');const out=await evaluateGeneral(prepared.packet.objective,docs,$('response').value,{},lang);if(version!==generation)return;display(out.report);setNotice('complete');selectTab('report',true);}catch(e){showError(e);}finally{setBusy(false);}
 });
 $('response').addEventListener('input',()=>resetReport());
 async function waitForJob(signal){
@@ -149,7 +150,7 @@ async function runLive(resuming=false){
  const version=generation;setBusy(true);clearError();report=null;waitCancelled=false;controller=new AbortController();controls();const signal=controller.signal;const timer=setTimeout(()=>controller?.abort(),240000);
  try{
   let data;if(resuming){setNotice('awaiting',{id:pendingJob.id});data=await waitForJob(signal);}else{
-   setNotice('sending');const response=await fetch('/api/general-review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({objective:prepared.packet.objective,documents:structuredClone(docs),consent:true,execute_browser:$('general-runtime').checked,execution_consent:$('general-runtime').checked}),signal});data=await response.json();if(!response.ok)throw Error(data.error||'errGeneric');
+   setNotice('sending');const response=await fetch('/api/general-review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({objective:prepared.packet.objective,documents:structuredClone(docs),language:lang,consent:true,execute_browser:$('general-runtime').checked,execution_consent:$('general-runtime').checked}),signal});data=await response.json();if(!response.ok)throw Error(data.error||'errGeneric');
    if(response.status===202&&data.job_id){pendingJob={id:data.job_id,version};capabilities.remaining_calls=data.remaining_calls;setNotice('awaiting',{id:data.job_id});data=await waitForJob(signal);}
   }
   if(version!==generation)return;capabilities.remaining_calls=data.remaining_calls;pendingJob=null;$('response').value=JSON.stringify(data.response,null,2);display(data.report);setNotice('complete');selectTab('report',true);

@@ -37,9 +37,9 @@ export function inspectDocuments(documents){
   return result;
  });
 }
-export async function prepareGeneral(objective,documents){
+export async function prepareGeneral(objective,documents,language='zh'){
  const packet=await makePacket(objective,documents),facts=inspectDocuments(documents);
- return {packet,facts,prompt:reviewPrompt(packet)+CHECK_GUIDE+'\nIndependent material observations (computed by code, not the model):\n'+JSON.stringify(facts,null,2)};
+ return {packet,facts,prompt:reviewPrompt(packet,language)+CHECK_GUIDE+'\nIndependent material observations (computed by code, not the model):\n'+JSON.stringify(facts,null,2)};
 }
 export function parseResponse(raw){
  if(typeof raw==='string'){
@@ -49,8 +49,8 @@ export function parseResponse(raw){
  }
  return raw;
 }
-export async function evaluateGeneral(objective,documents,raw,runtime={}){
- const {packet,facts}=await prepareGeneral(objective,documents),response=parseResponse(raw);
+export async function evaluateGeneral(objective,documents,raw,runtime={},language='zh'){
+ const {packet,facts}=await prepareGeneral(objective,documents,language),response=parseResponse(raw);
  const report=importReview(packet,response);
  const requirements=[];
  for(const r of response.requirements){

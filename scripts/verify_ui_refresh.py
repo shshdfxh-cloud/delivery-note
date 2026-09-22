@@ -33,42 +33,44 @@ def main():
             page.on('request',lambda r:external_posts.append(r.url) if r.method=='POST' and not r.url.startswith(base) else None)
             page.set_default_timeout(10000)
             page.goto(base,wait_until='networkidle',timeout=35000)
-            assert page.locator('html').get_attribute('lang')=='zh-CN'
-            assert page.locator('h1').inner_text().replace('\n','')=='交付了，真的做到了吗？'
+            assert page.locator('html').get_attribute('lang')=='en'
+            assert 'But does it deliver?' in page.locator('h1').inner_text()
             assert page.locator('#prompt').is_hidden() and page.locator('#response').is_hidden()
             assert page.locator('#review-empty').is_visible()
             assert not page.evaluate("document.documentElement.scrollWidth>innerWidth")
             page.screenshot(path=str(OUT/'desktop-home.png'),full_page=False)
-            done('Chinese-first homepage; technical controls stay hidden until needed')
+            done('English-first homepage; technical controls stay hidden until needed')
+            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='zh-CN'
+            assert page.locator('h1').inner_text().replace('\n','')=='交付了，真的做到了吗？'
+            page.reload(wait_until='networkidle');assert page.locator('html').get_attribute('lang')=='zh-CN'
             page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='en'
-            assert 'But does it deliver?' in page.locator('h1').inner_text()
-            page.reload(wait_until='networkidle');assert page.locator('html').get_attribute('lang')=='en'
-            page.locator('#language').click()
             done('Complete language switch persists across reload')
             page.locator('#replay').click();page.locator('#report').wait_for(state='visible')
             assert page.locator('.finding').count()==4
-            assert '实际匹配 10 条，预期 12 条' in page.locator('.machine-check>p').inner_text()
-            assert page.locator('#decision strong').inner_text()=='需要修改'
+            assert 'Matched 10 records; expected 12' in page.locator('.machine-check>p').inner_text()
+            assert page.locator('#decision strong').inner_text()=='Needs correction'
+            assert page.locator('#objective').input_value()==sample['objective_en']
             assert page.locator('.report-stats .unverified strong').inner_text()=='1'
-            assert '没有调用模型' in page.locator('#recording-state').inner_text()
+            assert 'no new model request was made' in page.locator('#recording-state').inner_text()
             page.evaluate("document.querySelector('#tab-report').scrollIntoView({block:'start',behavior:'instant'})");page.screenshot(path=str(OUT/'desktop-report.png'),full_page=False)
             page.locator('.output-card').screenshot(path=str(OUT/'report-card.png'))
             done('Recorded SERV result revalidated: 10 vs 12, four findings, one evidence gap')
             first=page.locator('.source-detail').first;first.locator('summary').click()
             assert first.locator('blockquote').inner_text()==response['requirements'][0]['evidence'][0]['quote']
-            page.locator('#language').click()
-            assert page.locator('#decision strong').inner_text()=='Needs correction'
             for text in page.locator('.finding h4,.finding-reason,.next-action').all_text_contents():assert not re.search('[\u4e00-\u9fff]',text),text
             assert page.locator('.source-detail blockquote').first.text_content()==response['requirements'][0]['evidence'][0]['quote']
             page.evaluate("document.querySelector('#tab-report').scrollIntoView({block:'start',behavior:'instant'})");page.screenshot(path=str(OUT/'english-report.png'),full_page=False)
-            done('English report presentation switches; verbatim Chinese evidence is unchanged')
+            done('English sample objective and report are translated; verbatim Chinese evidence is unchanged')
             with page.expect_download() as download:page.locator('#download-md').click()
             md=download.value;md.save_as(str(OUT/'report-en.md'))
             assert '# Delivery review report' in (OUT/'report-en.md').read_text(encoding='utf-8')
-            page.locator('#language').click()
+            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='zh-CN'
+            assert page.locator('#objective').input_value()==sample['objective']
+            assert page.locator('#decision strong').inner_text()=='需要修改'
             with page.expect_download() as download:page.locator('#download-md').click()
             download.value.save_as(str(OUT/'report-zh.md'))
             assert '# 交付审查报告' in (OUT/'report-zh.md').read_text(encoding='utf-8')
+            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='en'
             with page.expect_download() as download:page.locator('#download-json').click()
             download.value.save_as(str(OUT/'evidence.json'))
             report=json.loads((OUT/'evidence.json').read_text(encoding='utf-8'))
@@ -84,6 +86,7 @@ def main():
                     page.evaluate("scrollTo({top:0,behavior:'instant'})");page.screenshot(path=str(OUT/'mobile-home.png'),full_page=False)
             done('No horizontal overflow at 320, 390, 768, 1024 and 1707 CSS pixels')
             page.set_viewport_size({'width':1440,'height':1000})
+            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='zh-CN'
             page.locator('#reset').click()
             page.locator('#objective').fill(sample['objective'])
             files=[{'name':d['name'],'mimeType':'text/plain','buffer':d['content'].encode('utf-8')} for d in sample['documents']]
@@ -110,15 +113,16 @@ def main():
             page.locator('#files-input').set_input_files({'name':'unsupported.pdf','mimeType':'application/pdf','buffer':b'%PDF-test'})
             assert 'UTF-8' in page.locator('#error').inner_text();assert page.locator('.document-row').count()==3
             done('Unsupported binary format rejected without losing existing files')
+            page.evaluate("localStorage.removeItem('delivery-note-language-v2')")
             page.goto(base+'checks.html',wait_until='networkidle')
-            assert page.locator('html').get_attribute('lang')=='zh-CN'
+            assert page.locator('html').get_attribute('lang')=='en'
             page.locator('#review').click();page.locator('#report').wait_for(state='visible')
-            assert '需要修改' in page.locator('#decision').inner_text()
+            assert 'Correction required' in page.locator('#decision').inner_text()
             page.screenshot(path=str(OUT/'checks-desktop.png'),full_page=False)
             page.set_viewport_size({'width':390,'height':844});assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
             page.screenshot(path=str(OUT/'checks-mobile.png'),full_page=False)
-            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='en'
             assert page.get_by_role('link',name='General review',exact=True).is_visible()
+            page.locator('#language').click();assert page.locator('html').get_attribute('lang')=='zh-CN'
             done('Companion checks page still runs real data checks and supports both languages on mobile')
 
             if not args.base_url:

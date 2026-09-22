@@ -20,6 +20,9 @@ See [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md) for the fixed product goal, current bou
 
 ## v0.3 — the same entry, expanded to general delivery review
 
+- The public UI now defaults to English; Chinese is available from the language switch. The recorded training example also shows an English customer objective and English finding explanations in English mode, while exact source quotations remain unchanged.
+
+
 The main demo now starts with **customer-purpose review of actual documents, data and code-as-text**, rather than the old synthetic-count handoff message. The previous deterministic data/web workbench remains at `checks.html`; the original SERV recordings remain at `legacy/`. Existing repository, demo and contest entry URLs are preserved.
 
 **Try the main demo:** click “Run the example” (or “运行示例”). Actual file parsing, 10 completed / 2 pending counts, exact goal/line quotation validation and the model-selected bounded count check run anew. The SERV response itself is a clearly labelled real browser recording, not a new inference request. It identifies the false completion claim, missing follow-up ownership/schedule, and unsupported execution/acceptance claims.

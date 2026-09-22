@@ -200,7 +200,7 @@ class Handler(BaseHTTPRequestHandler):
     def general_review(self, data):
         """One opt-in goal/material/model/tools/report pipeline; no private-key extraction."""
         required = {'objective', 'documents', 'consent'}
-        if not required.issubset(data) or set(data) - required - {'execute_browser', 'execution_consent'} or data.get('consent') is not True:
+        if not required.issubset(data) or set(data) - required - {'execute_browser', 'execution_consent', 'language'} or data.get('consent') is not True:
             return self.send(400, {'error': 'Explicit full-material consent and objective/documents are required'})
         if data.get('execute_browser') is True and data.get('execution_consent') is not True:
             return self.send(400, {'error': 'Explicit isolated execution consent is required'})
@@ -215,7 +215,7 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError(out.stderr[:1000])
             return json.loads(out.stdout)
         try:
-            payload = {'objective': data['objective'], 'documents': data['documents']}
+            payload = {'objective': data['objective'], 'documents': data['documents'], 'language': 'en' if data.get('language') == 'en' else 'zh'}
             prepared = process({**payload, 'mode': 'prepare'})
             agent_mode = getattr(self.server, 'agent_review', False)
             if not agent_mode and not os.environ.get('SERV_API_KEY'):

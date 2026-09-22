@@ -23,3 +23,5 @@
 运行 `python scripts/verify_ui_refresh.py`；需要本机已安装的Edge、Playwright、Python和Node。脚本使用独立无窗口浏览器与临时本地服务，结束后关闭它们，不复用用户登录数据。可使用 `--base-url https://shshdfxh-cloud.github.io/delivery-note/` 复测公开页；该模式不运行本地队列替代响应测试。
 
 公开页仍是本机文件检查、真实录制回放或手动转交；本地AI助手接手和API模式的既有边界没有因界面修改而扩大。此次不重填报名、不新增X帖。
+
+- The public UI now defaults to English; Chinese is available from the language switch. The recorded training example also shows an English customer objective and English finding explanations in English mode, while exact source quotations remain unchanged.

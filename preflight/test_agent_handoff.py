@@ -19,11 +19,11 @@ class AgentHandoff(unittest.TestCase):
   if origin:headers['Origin']=origin
   c.request(method,path,None if body is None else json.dumps(body),headers);r=c.getresponse();result=(r.status,json.loads(r.read()));c.close();return result
  def test_consent_and_cross_site_boundaries(self):
-  self.assertEqual(self.request('POST','/api/general-review',{**self.sample,'consent':False})[0],400)
+  self.assertEqual(self.request('POST','/api/general-review',{'objective':self.sample['objective'],'documents':self.sample['documents'],'consent':False})[0],400)
   self.assertEqual(self.request('GET','/api/agent-jobs',origin='https://foreign.invalid')[0],403)
   self.assertEqual(self.server.remaining_calls,2);self.assertEqual(self.server.jobs,{})
  def test_queue_validate_complete_and_prevent_overwriting(self):
-  status,queued=self.request('POST','/api/general-review',{**self.sample,'consent':True});self.assertEqual(status,202)
+  status,queued=self.request('POST','/api/general-review',{'objective':self.sample['objective'],'documents':self.sample['documents'],'consent':True});self.assertEqual(status,202)
   path='/api/agent-jobs/'+queued['job_id'];self.assertEqual(self.request('GET',path)[1]['status'],'awaiting_agent')
   bad={**self.raw,'packet_id':'wrong'};self.assertEqual(self.request('POST',path,{'response':bad})[0],400)
   status,result=self.request('POST',path,{'response':self.raw});self.assertEqual(status,200)

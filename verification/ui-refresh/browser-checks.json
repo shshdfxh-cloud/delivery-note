@@ -1,10 +1,10 @@
 {
-  "base": "http://127.0.0.1:3103/",
+  "base": "http://127.0.0.1:11479/",
   "checks": [
-    "Chinese-first homepage; technical controls stay hidden until needed",
+    "English-first homepage; technical controls stay hidden until needed",
     "Complete language switch persists across reload",
     "Recorded SERV result revalidated: 10 vs 12, four findings, one evidence gap",
-    "English report presentation switches; verbatim Chinese evidence is unchanged",
+    "English sample objective and report are translated; verbatim Chinese evidence is unchanged",
     "Actual downloads: Chinese and English Markdown plus unmodified evidence JSON",
     "No horizontal overflow at 320, 390, 768, 1024 and 1707 CSS pixels",
     "Real file picker, reference roles, replace confirmation, consent and package preparation",

@@ -10,4 +10,4 @@
 
 /* Readability pass after inspecting actual desktop and narrow-screen renders. */
 .lede{max-width:520px}.report-summary,.finding-reason{font-size:14px}.finding h4{font-size:16px}.goal-reference{font-size:12px}.path-item p{font-size:13px}.status-note{line-height:1.9}
-@media(max-width:520px){.report-summary,.finding-reason{font-size:13px}.finding h4{font-size:15px}.goal-reference{font-size:11px}.stepper b{white-space:nowrap}.stepper li{gap:5px}.stepper{gap:5px}}
+@media(max-width:520px){.report-summary,.finding-reason{font-size:13px}.finding h4{font-size:15px}.goal-reference{font-size:11px}.stepper b{white-space:normal;overflow-wrap:anywhere}.stepper li{gap:5px;min-width:0}.stepper{gap:5px}}

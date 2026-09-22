@@ -21,7 +21,7 @@ class GeneralService(unittest.TestCase):
   if origin:headers['Origin']=origin
   c.request('POST','/api/general-review',json.dumps(data).encode(),headers)
   r=c.getresponse();out=(r.status,json.loads(r.read()));c.close();return out
- def body(self):return {**SAMPLE,'consent':True}
+ def body(self):return {'objective':SAMPLE['objective'],'documents':SAMPLE['documents'],'consent':True}
  def test_complete_route_checks_actual_material_and_provider_quotes(self):
   with patch('delivery_note.app.call_serv',return_value=(json.dumps(RESPONSE),{'model':'substituted-for-test'})) as call:
    status,r=self.request(self.body());self.assertEqual(status,200);self.assertEqual(r['report']['status'],'advisory_needs_correction')

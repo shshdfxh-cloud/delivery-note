@@ -8,7 +8,7 @@ const words={
 Object.assign(words.zh,{checksBrand:'数据与运行检查',generalNav:'通用交付审查',pathFooter:'目的 → 检查 → 证据 → 结论',generalHint:'审查报告、代码说明或综合材料？先从通用审查开始。',generalLink:'进入通用审查 →',evidenceFirst:'证据优先',eyebrow:'专项检查 · 独立计算与运行证据',hero:'文件看起来对，<br><span>结果也真的对吗？</span>',lede:'独立重算原始数据，核对逐行结果；在本地服务中，可以实际运行支持的静态网页流程。',workspace:'数据与运行检查',principleBody:'这一页执行明确的验收规则。没有运行证据的步骤，保持未验证。'});
 Object.assign(words.en,{checksBrand:'DATA & RUNTIME',generalNav:'General review',pathFooter:'GOAL → CHECK → EVIDENCE → DECISION',generalHint:'Reviewing a report, source code or mixed materials? Start with general review.',generalLink:'Open general review →',evidenceFirst:'EVIDENCE FIRST',eyebrow:'FOCUSED CHECKS · MEASURED EVIDENCE',hero:'The files look right.<br><span>Do the results agree?</span>',lede:'Recompute source data and compare the actual results. A local service can also execute supported static-web journeys.',workspace:'Data & runtime checks',principleBody:'This workspace runs explicit acceptance rules. A journey without execution evidence remains unverified.'});
 const methodName=key=>({sha256:lang==='zh'?'文件指纹':'File fingerprint',text_includes:lang==='zh'?'文字存在性':'Text presence',manual:lang==='zh'?'待补充证据':'Evidence needed'}[key]||uiTr(lang,key));
-let lang;try{lang=localStorage.getItem('delivery-note-language');}catch{}if(!['zh','en'].includes(lang))lang='zh';
+let lang;try{lang=localStorage.getItem('delivery-note-language-v2');}catch{}if(!['zh','en'].includes(lang))lang='en';
 let samples=[],pkg,selected=null,live=false,serv=false,remaining=0,busy=false,lastReport=null,editorDirty=false,planInfo='';
 const t=k=>words[lang][k]||k;
 const node=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
@@ -147,7 +147,7 @@ async function refreshStatus(){
  if(!['127.0.0.1','localhost'].includes(location.hostname))return;
  try{const response=await fetch('/api/status',{signal:AbortSignal.timeout(2500)});if(response.ok){const s=await response.json();live=s.mode==='live'&&s.node_available!==false;serv=!!s.serv_configured;remaining=s.remaining_calls||0;}}catch{live=false;serv=false;}
 }
-$('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('delivery-note-language',lang);}catch{}renderLanguage();});
+$('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('delivery-note-language-v2',lang);}catch{}renderLanguage();});
 $('custom').addEventListener('click',makeCustom);
 $('objective').addEventListener('input',()=>{pkg.objective=$('objective').value;invalidate();});
 $('profile').addEventListener('change',()=>{pkg.profile=$('profile').value;$('runtime').checked=false;invalidate();});
