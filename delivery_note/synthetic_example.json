@@ -1,0 +1,7 @@
+{
+  "example_only": true,
+  "rows": {"input": 120, "kept": 113, "duplicates": 5, "rejected": 2},
+  "tests": {"passed": 8, "failed": 0, "skipped": 0, "total": 8},
+  "files": [{"name": "synthetic-output.csv", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}],
+  "claims": ["ready_for_review"]
+}
