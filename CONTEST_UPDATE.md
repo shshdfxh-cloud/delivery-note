@@ -46,3 +46,7 @@ The attempted new image upload did not appear in the independently refreshed upd
 ![Current public general review: exact references, measured 10/12 completion and missing evidence](docs/review-result.png)
 
 This confirms a public amendment, **not** an edited Typeform record or organizer approval of the amendment. Existing submitted code/demo URLs remain unchanged and now serve the revised product. No second application was submitted.
+
+## Integrated existing live handoff evidence
+
+The existing repository also gained commit `67bd817`, containing the connected-assistant UI/job → signed-in SERV → returned response → visible report record and its validation against the consolidated engine. This was merged without rewriting either branch. See `AGENT_REVIEW.md` and `verification/live-agent-*.json`; this is not an API attestation or a claim that a standalone static page can control a signed-in website without an assistant.
