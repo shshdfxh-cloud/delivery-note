@@ -1,0 +1,141 @@
+{
+  "schema_version": "delivery-note/semantic-report-1",
+  "packet_id": "b80da506571ee5c4fcadcf7bb9bf8c209064e7209c15e349a04c6c8334ee841e",
+  "created_at": "2026-09-22T06:29:20.763Z",
+  "objective": "核对2026年9月22日培训交付报告，确认12人全部完成的结论是否有依据；未完成者须有负责人和9月30日前的补训安排。没有实际执行或独立来源证据，不得宣称已实际执行或客户已确认。",
+  "status": "advisory_needs_correction",
+  "summary": "交付报告的关键结论缺乏依据且与原始记录矛盾：到2026-09-22并非12人全部完成，实际可见10人completed、2人pending；因此“待补训人数：0”“后续无需安排”不成立，且未见未完成者负责人及9月30日前补训安排。另在缺少运行记录和验收回执时，报告仍宣称“执行已通过，客户已验收”，与依据直接冲突。",
+  "results": [
+    {
+      "id": "G1",
+      "goal_quote": "确认12人全部完成的结论是否有依据",
+      "criterion": "“12名员工全部完成培训”应能被提供的完成记录支持。",
+      "layer": "facts",
+      "model_status": "contradicted",
+      "status": "contradicted",
+      "reason": "依据表中仅10人为completed，P11与P12为pending，不能支持“12名员工全部完成培训”。",
+      "next_check": "按attendance.csv重算完成与未完成人数，并更正结论。",
+      "evidence": [
+        {
+          "file": "delivery.md",
+          "role": "deliverable",
+          "start": 2,
+          "end": 2,
+          "quote": "截至2026-09-22，12名员工全部完成培训。",
+          "sha256": "5299e7da19443f1a393e4efb2332e508bd55921febddf75db0c03dc7a0b17ac5",
+          "quote_matches": true
+        },
+        {
+          "file": "attendance.csv",
+          "role": "reference",
+          "start": 2,
+          "end": 13,
+          "quote": "P01,completed\nP02,completed\nP03,completed\nP04,completed\nP05,completed\nP06,completed\nP07,completed\nP08,completed\nP09,completed\nP10,completed\nP11,pending\nP12,pending",
+          "sha256": "5190122f0afe45dc97ed23d7f0e5450acc4c369cbe99910bb80f33cf766fb77f",
+          "quote_matches": true
+        }
+      ]
+    },
+    {
+      "id": "G2",
+      "goal_quote": "未完成者须有负责人和9月30日前的补训安排",
+      "criterion": "若存在未完成者，交付中应列出负责人及不晚于9月30日的补训安排。",
+      "layer": "purpose",
+      "model_status": "contradicted",
+      "status": "contradicted",
+      "reason": "材料显示存在2名pending，但交付写明“待补训人数：0”“后续无需安排”，且未提供任何负责人或9月30日前补训安排。",
+      "next_check": "补充P11、P12的负责人、补训时间与完成闭环，日期需不晚于2026-09-30。",
+      "evidence": [
+        {
+          "file": "attendance.csv",
+          "role": "reference",
+          "start": 12,
+          "end": 13,
+          "quote": "P11,pending\nP12,pending",
+          "sha256": "5190122f0afe45dc97ed23d7f0e5450acc4c369cbe99910bb80f33cf766fb77f",
+          "quote_matches": true
+        },
+        {
+          "file": "delivery.md",
+          "role": "deliverable",
+          "start": 3,
+          "end": 5,
+          "quote": "待补训人数：0。\n执行已通过，客户已验收。\n后续无需安排。",
+          "sha256": "5299e7da19443f1a393e4efb2332e508bd55921febddf75db0c03dc7a0b17ac5",
+          "quote_matches": true
+        }
+      ]
+    },
+    {
+      "id": "G3",
+      "goal_quote": "不得宣称已实际执行或客户已确认",
+      "criterion": "在没有实际执行或独立来源证据时，不应宣称执行已通过或客户已验收。",
+      "layer": "runtime",
+      "model_status": "contradicted",
+      "status": "contradicted",
+      "reason": "依据明确说明尚未提供课程运行记录或客户验收回执，不能支持“执行已通过，客户已验收”。",
+      "next_check": "删除已执行/已验收表述，或补充独立可核验的运行与验收证据。",
+      "evidence": [
+        {
+          "file": "delivery.md",
+          "role": "deliverable",
+          "start": 4,
+          "end": 4,
+          "quote": "执行已通过，客户已验收。",
+          "sha256": "5299e7da19443f1a393e4efb2332e508bd55921febddf75db0c03dc7a0b17ac5",
+          "quote_matches": true
+        },
+        {
+          "file": "source-note.txt",
+          "role": "reference",
+          "start": 2,
+          "end": 2,
+          "quote": "尚未提供签名签到原件、课程运行记录或客户验收回执。",
+          "sha256": "54dfe729ebe0746a1882c18f42eebe5068472931b64440d185e621a9a3ddedbb",
+          "quote_matches": true
+        }
+      ]
+    }
+  ],
+  "inventory": [
+    {
+      "name": "attendance.csv",
+      "role": "reference",
+      "sha256": "5190122f0afe45dc97ed23d7f0e5450acc4c369cbe99910bb80f33cf766fb77f",
+      "bytes": 174
+    },
+    {
+      "name": "delivery.md",
+      "role": "deliverable",
+      "sha256": "5299e7da19443f1a393e4efb2332e508bd55921febddf75db0c03dc7a0b17ac5",
+      "bytes": 155
+    },
+    {
+      "name": "source-note.txt",
+      "role": "reference",
+      "sha256": "54dfe729ebe0746a1882c18f42eebe5068472931b64440d185e621a9a3ddedbb",
+      "bytes": 128
+    }
+  ],
+  "provenance": {
+    "mode": "browser-assisted-paste",
+    "provider_label": "OpenServ Playground raw panel / GPT-5.4 (UI-observed)",
+    "provider_authenticated": false,
+    "live_api_verified": false,
+    "execution_performed": false
+  },
+  "verification": {
+    "quotes_match": true,
+    "goal_references_match": true,
+    "goal_coverage": "requires_independent_review",
+    "final_acceptance": "not_established"
+  },
+  "limitations": [
+    "仅依据提供的三份材料做语义审查，未运行程序、未做外部调查。",
+    "attendance.csv为课程管理员导出数据；未见签名签到原件，无法进一步独立核验人员出勤真实性。",
+    "只核验引文与本次材料一致，不认证材料来源或AI推理正确。",
+    "目标片段引用不证明已覆盖全部目的；仍需独立审查遗漏。",
+    "导回文本不能认证模型身份或调用来源，也不是应用API联通证明。",
+    "本入口不执行程序或外部核实，不会产生自动终验通过结论。"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "observed_at": "2026-09-22T06:29:20.879605+00:00",
+  "method": "existing Cent Browser tab UI fill and Submit; first visible role=log content read",
+  "url": "https://console.openserv.ai/playground?review=delivery-note-general-20260922",
+  "raw_panel_model": "GPT-5.4",
+  "serv_panel_model_visible": "GPT-5.4 Mini",
+  "validated_response": "raw panel only; do not call this a SERV-enhanced output or backend API test",
+  "raw_panel_displayed_cost_usd": 0.0239,
+  "raw_panel_displayed_tokens": {
+    "in": 1470,
+    "out": 833,
+    "reasoning": 516
+  },
+  "input": "synthetic 12-person training evidence package; an independent turn in an existing playground conversation",
+  "no_key_read": true,
+  "no_new_browser_window": true,
+  "other_existing_playground_conversation_preserved": true,
+  "caveat": "Missing execution evidence is not proof that no execution occurred; the violation is the unsupported claim, not a demonstrated runtime failure."
+}

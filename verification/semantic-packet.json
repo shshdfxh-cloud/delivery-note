@@ -1,0 +1,54 @@
+{
+  "schema_version": "delivery-note/review-packet-1",
+  "objective": "核对2026年9月22日培训交付报告，确认12人全部完成的结论是否有依据；未完成者须有负责人和9月30日前的补训安排。没有实际执行或独立来源证据，不得宣称已实际执行或客户已确认。",
+  "documents": [
+    {
+      "name": "attendance.csv",
+      "role": "reference",
+      "sha256": "5190122f0afe45dc97ed23d7f0e5450acc4c369cbe99910bb80f33cf766fb77f",
+      "bytes": 174,
+      "lines": [
+        "id,status",
+        "P01,completed",
+        "P02,completed",
+        "P03,completed",
+        "P04,completed",
+        "P05,completed",
+        "P06,completed",
+        "P07,completed",
+        "P08,completed",
+        "P09,completed",
+        "P10,completed",
+        "P11,pending",
+        "P12,pending",
+        ""
+      ]
+    },
+    {
+      "name": "delivery.md",
+      "role": "deliverable",
+      "sha256": "5299e7da19443f1a393e4efb2332e508bd55921febddf75db0c03dc7a0b17ac5",
+      "bytes": 155,
+      "lines": [
+        "# 培训交付报告",
+        "截至2026-09-22，12名员工全部完成培训。",
+        "待补训人数：0。",
+        "执行已通过，客户已验收。",
+        "后续无需安排。",
+        ""
+      ]
+    },
+    {
+      "name": "source-note.txt",
+      "role": "reference",
+      "sha256": "54dfe729ebe0746a1882c18f42eebe5068472931b64440d185e621a9a3ddedbb",
+      "bytes": 128,
+      "lines": [
+        "签到表为课程管理员提供的导出数据。",
+        "尚未提供签名签到原件、课程运行记录或客户验收回执。",
+        ""
+      ]
+    }
+  ],
+  "packet_id": "b80da506571ee5c4fcadcf7bb9bf8c209064e7209c15e349a04c6c8334ee841e"
+}

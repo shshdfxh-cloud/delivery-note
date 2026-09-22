@@ -16,6 +16,11 @@ from .goal_serv import propose, explain
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / 'web'
 ASSETS = {
+    '/general-review.html': ('general-review.html', 'text/html; charset=utf-8'),
+    '/general-review.mjs': ('general-review.mjs', 'text/javascript; charset=utf-8'),
+    '/general-review.css': ('general-review.css', 'text/css; charset=utf-8'),
+    '/semantic.mjs': ('semantic.mjs', 'text/javascript; charset=utf-8'),
+    '/semantic-sample.json': ('semantic-sample.json', 'application/json'),
     '/': ('index.html', 'text/html; charset=utf-8'),
     '/index.html': ('index.html', 'text/html; charset=utf-8'),
     '/styles.css': ('styles.css', 'text/css; charset=utf-8'),

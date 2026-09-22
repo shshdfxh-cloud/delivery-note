@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "node",
+      "--test",
+      "preflight/test_semantic_review.mjs",
+      "preflight/test_goal_engine.mjs"
+    ],
+    "exit_code": 0,
+    "output": "✔ detects corrupted values even when all counts, uniqueness and totals agree (19.7298ms)\n✔ correct data passes every declared criterion and hashes actual bytes (1.5153ms)\n✔ unconfirmed goal coverage blocks final acceptance (1.1607ms)\n✔ static website inspection is never presented as actual execution (0.7154ms)\n✔ changed objective or bytes invalidate an old runtime receipt (1.2282ms)\n✔ CSV quoted newlines, escaped quotes and CRLF are actual records, not line counts (0.3019ms)\n✔ same-size dropped/added rows and reordered columns are caught by exact recomputation (2.4163ms)\n✔ exact decimal sums avoid float errors and missing JSON fields fail (0.8349ms)\n✔ unsafe names, duplicate case-folded paths, booleans as counts and unsupported checks are rejected (0.4065ms)\n✔ a browser flow needs actual interaction and observable assertion (0.2075ms)\n✔ syntax problems cannot be hidden by omitting checks; external claims stay unverified (1.5146ms)\n✔ missing output files, empty requirements and generic purpose cannot get an all-clear (1.3117ms)\n✔ a non-web review binds exact goal and real source bytes (2.1175ms)\n✔ changed objective or bytes produces a different snapshot (3.7662ms)\n✔ invented quote and invalid line numbers are rejected (0.3764ms)\n✔ goal references must actually occur in the customer purpose (0.1408ms)\n✔ model text cannot authenticate execution (0.1764ms)\n✔ supported claims never become automatic final acceptance (0.1476ms)\n✔ missing evidence may be unverified, never supported (0.1647ms)\n✔ no executable actions or invalid schema accepted (0.3342ms)\n✔ unsafe, case-colliding, empty and oversized materials rejected (1.72ms)\n✔ line normalization does not hide byte changes (1.2431ms)\n✔ fenced JSON accepted, malformed and excessive response rejected (0.3133ms)\nℹ tests 23\nℹ suites 0\nℹ pass 23\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 144.692\n"
+  },
+  {
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "preflight",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "output": "test_boolean_negative_and_string_are_not_counts (test_delivery_note.EvidenceChecks.test_boolean_negative_and_string_are_not_counts) ... ok\ntest_consistent_packet_only_claims_internal_review (test_delivery_note.EvidenceChecks.test_consistent_packet_only_claims_internal_review) ... ok\ntest_missing_rows_cannot_be_hidden_in_a_success_note (test_delivery_note.EvidenceChecks.test_missing_rows_cannot_be_hidden_in_a_success_note) ... ok\ntest_payment_and_acceptance_are_not_proven_by_self_report (test_delivery_note.EvidenceChecks.test_payment_and_acceptance_are_not_proven_by_self_report) ... ok\ntest_skipped_tests_and_duplicate_inventory_need_correction (test_delivery_note.EvidenceChecks.test_skipped_tests_and_duplicate_inventory_need_correction) ... ok\ntest_cross_site_and_arbitrary_content_rejected_before_call (test_delivery_note_live.LocalDemoBoundaries.test_cross_site_and_arbitrary_content_rejected_before_call) ... ok\ntest_failure_consumes_slot_and_next_call_is_stopped (test_delivery_note_live.LocalDemoBoundaries.test_failure_consumes_slot_and_next_call_is_stopped) ... ok\ntest_successful_live_route_returns_review (test_delivery_note_live.LocalDemoBoundaries.test_successful_live_route_returns_review) ... ok\ntest_only_derived_synthetic_material_is_sent (test_delivery_note_live.ServBoundaries.test_only_derived_synthetic_material_is_sent) ... ok\ntest_provider_failure_is_not_retried_or_leaked (test_delivery_note_live.ServBoundaries.test_provider_failure_is_not_retried_or_leaked) ... ok\ntest_truncated_output_is_not_presented_as_complete (test_delivery_note_live.ServBoundaries.test_truncated_output_is_not_presented_as_complete) ... ok\ntest_unknown_sample_never_calls_provider (test_delivery_note_live.ServBoundaries.test_unknown_sample_never_calls_provider) ... ok\ntest_actual_bytes_are_recomputed_by_server_not_a_client_verdict (test_goal_service.GoalServiceTests.test_actual_bytes_are_recomputed_by_server_not_a_client_verdict) ... ok\ntest_browser_unavailable_is_reported_as_unverified_not_pass (test_goal_service.GoalServiceTests.test_browser_unavailable_is_reported_as_unverified_not_pass) ... ok\ntest_cross_site_and_missing_execution_consent_block_before_browser (test_goal_service.GoalServiceTests.test_cross_site_and_missing_execution_consent_block_before_browser) ... ok\ntest_failure_consumes_only_one_bounded_provider_attempt (test_goal_service.GoalServiceTests.test_failure_consumes_only_one_bounded_provider_attempt) ... ok\ntest_no_provider_call_without_explicit_data_consent (test_goal_service.GoalServiceTests.test_no_provider_call_without_explicit_data_consent) ... ok\ntest_planner_sends_structure_not_secret_file_contents_and_does_not_accept_assumptions (test_goal_service.PlannerMaterialTests.test_planner_sends_structure_not_secret_file_contents_and_does_not_accept_assumptions) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 3.650s\n\nOK\n"
+  }
+]
