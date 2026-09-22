@@ -1,0 +1,2 @@
+import {prepareGeneral,evaluateGeneral,AUTO_SYSTEM} from './web/general-engine.mjs';
+let input='';try{for await(const c of process.stdin){input+=c;if(input.length>700000)throw Error('Request too large');}const x=JSON.parse(input);let out;if(x.mode==='prepare'){out=await prepareGeneral(x.objective,x.documents);out.system=AUTO_SYSTEM;}else out=await evaluateGeneral(x.objective,x.documents,x.raw,x.runtime||{});process.stdout.write(JSON.stringify(out));}catch(e){process.stderr.write(String(e.message).slice(0,1000));process.exitCode=1;}

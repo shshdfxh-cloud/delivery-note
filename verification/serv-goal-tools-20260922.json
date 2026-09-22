@@ -1,0 +1,114 @@
+{
+  "schema_version": "delivery-note/recorded-semantic-1",
+  "recorded_at": "2026-09-22",
+  "provider": "SERV Playground enhanced panel",
+  "model": "GPT-5.4 Mini",
+  "mode": "recorded_browser_response",
+  "displayed_cost_usd": 0.0285,
+  "displayed_usage": {
+    "input": 3377,
+    "output": 843,
+    "reasoning": 3336
+  },
+  "capture": "Completed visible SERV-side JSON transcribed without changing its findings. Packet id equality checked in the browser. This run used a condensed helper prompt preserving the objective and all material lines. Not an API receipt; comparison mode also runs a raw model.",
+  "response": {
+    "schema_version": "delivery-note/semantic-review-1",
+    "packet_id": "b80da506571ee5c4fcadcf7bb9bf8c209064e7209c15e349a04c6c8334ee841e",
+    "summary": "attendance.csv仅显示10条completed、2条pending，与交付稿“12名员工全部完成”相矛盾；报告还宣称无需补训、已通过且已验收，但缺少独立验收证据和补训安排。负责人信息未见，无法核实。",
+    "requirements": [
+      {
+        "id": "G1",
+        "goal_quote": "确认12人全部完成的结论是否有依据",
+        "criterion": "12人全部完成必须有记录依据，且12条状态应全部为completed。",
+        "layer": "facts",
+        "status": "contradicted",
+        "reason": "材料中有2人仍为pending，无法支持“12人全部完成”；交付稿却直接给出全部完成结论。",
+        "evidence": [
+          {
+            "file": "delivery.md",
+            "start": 2,
+            "end": 2,
+            "quote": "截至2026-09-22，12名员工全部完成培训。"
+          },
+          {
+            "file": "attendance.csv",
+            "start": 2,
+            "end": 13,
+            "quote": "P01,completed\nP02,completed\nP03,completed\nP04,completed\nP05,completed\nP06,completed\nP07,completed\nP08,completed\nP09,completed\nP10,completed\nP11,pending\nP12,pending"
+          }
+        ],
+        "next_check": "核对completed数量是否应为12。",
+        "check": {
+          "type": "csv_count_where",
+          "file": "attendance.csv",
+          "filters": [
+            {
+              "column": "status",
+              "equals": "completed"
+            }
+          ],
+          "expected": 12
+        }
+      },
+      {
+        "id": "G2",
+        "goal_quote": "未完成者须有负责人和9月30日前的补训安排",
+        "criterion": "对未完成者必须给出补训安排，且截止到9月30日前。",
+        "layer": "purpose",
+        "status": "contradicted",
+        "reason": "attendance.csv存在pending，但交付稿写明待补训人数为0且后续无需安排，直接与该要求冲突。",
+        "evidence": [
+          {
+            "file": "delivery.md",
+            "start": 3,
+            "end": 5,
+            "quote": "待补训人数：0。\n执行已通过，客户已验收。\n后续无需安排。"
+          },
+          {
+            "file": "attendance.csv",
+            "start": 12,
+            "end": 13,
+            "quote": "P11,pending\nP12,pending"
+          }
+        ],
+        "next_check": "为两名pending人员补写负责人和9月30日前的补训计划。"
+      },
+      {
+        "id": "G3",
+        "goal_quote": "未完成者须有负责人",
+        "criterion": "若存在未完成者，应能指出负责人；不能空缺。",
+        "layer": "purpose",
+        "status": "unverified",
+        "reason": "现有材料只给出状态，没有任何负责人字段、姓名或指派记录，无法核实。",
+        "evidence": [],
+        "next_check": "补充每个pending人员对应负责人。"
+      },
+      {
+        "id": "G4",
+        "goal_quote": "没有实际执行或独立来源证据，不得宣称已实际执行或客户已确认",
+        "criterion": "不得把执行已通过、客户已验收写成既成事实，除非有独立来源证据。",
+        "layer": "runtime",
+        "status": "contradicted",
+        "reason": "交付稿直接宣称已通过、已验收，但source-note明确说未提供签名签到原件、课程运行记录或客户验收回执。",
+        "evidence": [
+          {
+            "file": "delivery.md",
+            "start": 4,
+            "end": 4,
+            "quote": "执行已通过，客户已验收。"
+          },
+          {
+            "file": "source-note.txt",
+            "start": 2,
+            "end": 2,
+            "quote": "尚未提供签名签到原件、课程运行记录或客户验收回执。"
+          }
+        ],
+        "next_check": "补齐独立运行证据后再写执行或验收结论。"
+      }
+    ],
+    "limitations": [
+      "仅依据所给材料审查；未运行程序、未联网、未做外部调查或客户验收。"
+    ]
+  }
+}

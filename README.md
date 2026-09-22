@@ -12,6 +12,24 @@ This is a **general-purpose, customer-goal-driven delivery audit**, not a websit
 
 See [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md) for the fixed product goal, current boundaries and development priorities.
 
+## v0.3 — the same entry, expanded to general delivery review
+
+The main demo now starts with **customer-purpose review of actual documents, data and code-as-text**, rather than the old synthetic-count handoff message. The previous deterministic data/web workbench remains at `checks.html`; the original SERV recordings remain at `legacy/`. Existing repository, demo and contest entry URLs are preserved.
+
+**Try the main demo:** click “Run recorded SERV example”. Actual file parsing, 10 completed / 2 pending counts, exact goal/line quotation validation and the model-selected bounded count check run anew. The SERV response itself is a clearly labelled real browser recording, not a new inference request. It identifies the false completion claim, missing follow-up ownership/schedule, and unsupported execution/acceptance claims.
+
+For a new delivery, enter the goal, select reference and deliverable text files, inspect the full-material prompt and explicitly consent. The same engine accepts the model's structured audit, rejects altered quotations or stale packets, executes supported data checks, and exports a report with objective → criteria → source evidence → measured findings. Semantic support and measured tests are shown separately: passing a narrow test cannot prove an entire business purpose.
+
+### Three honest model routes
+
+- **Public static site:** recorded SERV demonstration, fresh local checks and portable prompt/response import. No embedded key, visitor login, paid call or automatic data upload.
+- **Existing assistant and signed-in browser:** `python -m delivery_note.app --agent-review --max-calls 3` or `start-browser-review.cmd`. The user opts in; the local service queues a task; an existing authorized AI assistant uses its browser tools to submit to SERV and return the result. The app validates and evaluates it. This mode requires the assistant; a standalone web page cannot control another website. See [AGENT_REVIEW.md](AGENT_REVIEW.md). Queue/return boundaries are tested; the complete unattended live queue round trip is **not claimed verified**.
+- **Optional local API:** the user may configure their own server-side SERV key. The full-text general-review endpoint is tested with substituted provider responses; those tests are not live API evidence. Browser model experiments are recorded separately. Never put keys in client code.
+
+**Verified model evidence:** `verification/serv-goal-tools-20260922.json` contains the actual completed SERV-side browser response and observed usage; `verification/serv-goal-tools-validated.json` contains the independent recheck of that response against file bytes. The helper prompt was condensed for the browser, with the objective and every source line preserved. This is a browser observation, not a cryptographic provider receipt. The Playground comparison also runs a raw model; the displayed SERV-side amount is not the total comparison cost.
+
+**Scope:** this is a general-purpose audit workflow with concrete text/document/data and offline static-web adapters, not a guarantee of complete inspection of arbitrary systems. Code is reviewed as text unless the separate supported offline browser check is explicitly authorized. Binary Office/PDF parsing, arbitrary program execution, authenticated production systems, and independent real-world fact verification are not implemented. Missing evidence remains unverified; model reasoning and complete goal coverage still need independent review. The report is not a customer-acceptance certificate.
+
 ## What changed in v0.2
 
 The original three recorded SERV examples remain intact under **`legacy/`**. The new workbench checks **real selected files**, not placeholder hashes or saved verdicts. English and Chinese UI are available.
@@ -98,7 +116,7 @@ python scripts/sync_web.py
 
 Original sample/API tests are preserved. New tests target same-count corruption, actual hashes, stale evidence, missing goal coverage, quoted CSV, decimal arithmetic, unsafe paths, unsupported commands, consent, privacy and provider failure budgets. Real browser and live SERV verification are recorded separately in `UPGRADE_NOTES.md`; mocked provider tests are not live inference.
 
-Edit `delivery_note/web`, then run `scripts/sync_web.py` to sync `docs`. This **does not publish or deploy**. There is no change to contest submissions or account settings.
+Edit `delivery_note/web`, then run `scripts/sync_web.py` to sync `docs`. This **does not publish or deploy**. The current revision updates the same public repository and demo; it does not itself resubmit a competition form or change account settings. See CONTEST_UPDATE.md for the existing entry amendment.
 
 ## Contest and references
 

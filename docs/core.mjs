@@ -1,7 +1,7 @@
 /* One evidence engine for the browser and local Node runner. No eval or network. */
-export const VERSION = '0.2.0';
+export const VERSION = '0.3.0';
 export const LIMITS = {files: 40, bytes: 2 * 1024 * 1024, requirements: 24, steps: 12};
-export const TYPES = ['file_exists','sha256','csv_columns','csv_row_count','csv_unique',
+export const TYPES = ['file_exists','sha256','csv_columns','csv_row_count','csv_count_where','csv_unique',
   'csv_not_empty','csv_transform','sum_matches_json','json_value','text_includes','browser_flow','manual'];
 const te = new TextEncoder();
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -10,7 +10,7 @@ const error = msg => { throw new Error(msg); };
 const assert = (ok,msg) => { if (!ok) error(msg); };
 const str = (v,max=1000) => typeof v === 'string' && v.length > 0 && v.length <= max;
 const strings = v => Array.isArray(v) && v.length > 0 && v.length <= 30 && v.every(x=>str(x,120)) && new Set(v).size===v.length;
-export const layerOf = type => ({file_exists:1,sha256:1,csv_columns:2,csv_row_count:3,csv_unique:3,
+export const layerOf = type => ({file_exists:1,sha256:1,csv_columns:2,csv_row_count:3,csv_count_where:3,csv_unique:3,
   csv_not_empty:3,csv_transform:3,sum_matches_json:3,json_value:3,text_includes:2,browser_flow:4,manual:5}[type]||5);
 export function canonical(value) {
   if (Array.isArray(value)) return '['+value.map(canonical).join(',')+']';
@@ -43,6 +43,7 @@ export function validateRequirements(requirements) {
     if (['csv_columns','csv_unique','csv_not_empty'].includes(c.type)) assert(strings(c.columns),'Specify unique column names / 需要不重复的列名');
     if (c.type==='sha256') assert(/^[0-9a-f]{64}$/i.test(c.expected||''),'Expected SHA-256 must have 64 hex digits');
     if (c.type==='csv_row_count') assert(Number.isSafeInteger(c.expected)&&c.expected>=0,'Row count must be a nonnegative integer');
+    if(c.type==='csv_count_where'){assert(Number.isSafeInteger(c.expected)&&c.expected>=0,'Expected matching count must be a nonnegative integer');assert(Array.isArray(c.filters)&&c.filters.length>0&&c.filters.length<=12&&c.filters.every(x=>object(x)&&str(x.column,120)&&typeof x.equals==='string'&&x.equals.length<=1000),'Use 1-12 exact column/value filters');}
     if (c.type==='text_includes') assert(str(c.value,4000),'A nonempty literal is required');
     if (c.type==='json_value'||c.type==='sum_matches_json') assert(typeof c.pointer==='string'&&c.pointer.length<=300&&(c.pointer===''||c.pointer.startsWith('/')),'Use an RFC6901 JSON pointer');
     if (c.type==='json_value') assert(own(c,'expected'),'An explicit expected JSON value is required');
@@ -183,6 +184,7 @@ export async function audit(pkg,runtime={}) {
       const csv=get(c.file,'csv');const {rows}=csv.parsed;
       if(c.type==='csv_columns'){columns(csv,c.columns);add(r,'pass',`Required columns found: ${c.columns.join(', ')}`,sources);continue;}
       if(c.type==='csv_row_count'){add(r,rows.length===c.expected?'pass':'fail',`Parsed data records (header excluded): ${rows.length}; expected: ${c.expected}`,sources);continue;}
+      if(c.type==='csv_count_where'){const indexes=columns(csv,c.filters.map(x=>x.column));const count=rows.filter(row=>c.filters.every((x,i)=>row[indexes[i]]===x.equals)).length;add(r,count===c.expected?'pass':'fail',`Counted ${count}/${rows.length} records matching ${JSON.stringify(c.filters)}; expected ${c.expected}. Exact parsed values; not independent real-world truth.`,sources);continue;}
       if(c.type==='csv_unique'||c.type==='csv_not_empty') {
         const indexes=columns(csv,c.columns);assert(rows.length>0,'Empty CSV cannot establish this delivery condition');
         const values=rows.map(row=>indexes.map(i=>{let v=row[i];if(c.trim)v=v.trim();if(c.caseFold)v=v.toLowerCase();return v;}));
