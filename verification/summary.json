@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-22",
+  "baseline": "8b009ae4a61bee4e9937ee9fc01ad38e90836103",
+  "python_tests": {
+    "command": "python -m unittest discover -s preflight -p \"test_*.py\" -v",
+    "passed": 18,
+    "failed": 0
+  },
+  "node_tests": {
+    "command": "node --test preflight/test_goal_engine.mjs",
+    "passed": 12,
+    "failed": 0
+  },
+  "live_serv_called": false,
+  "live_serv_limitation": "Key-bearing launch blocked by platform. No subsequent key access or model request attempted; provider-specific paths use mock-response tests only.",
+  "runtime": "Windows / system Edge 153.0.4234.48 / isolated offline browser",
+  "artifacts": {
+    "correct-web.json": "ad83895d91cfaa6c9ac0231ffa56ba7d37d80f1d1415d240c0de241052bb0f12",
+    "broken-web.json": "7dcea508febc4940613d47d10ab82dc52ba2db2633aaf849b44cbd69e188b48a",
+    "blocked-network.json": "75ef8b94a2c8813586e9ea8eb6dc664dbdf652312508ea090fa8d26c8f0c2653",
+    "ui-verification.json": "6a6517a7abeff9e4f4e2d0b43ab5f2f551301de76a9844757e8c2b7527953adb",
+    "static-and-boundary-verification.json": "d5e2e2e9d3c7be70a367cd97dafb13f3f4619fc0be8bf8f0bf4baacce068fdac",
+    "uploaded-files-report.json": "129beab11313e28122d5bbf66d1fcd94bd8d73ab5eed1369fa1b28269ba5668f",
+    "downloaded-report.md": "2d8ba356eb4d11dce572e59bea9ee7b36b15de355935ffbff03452e550a36e34",
+    "overview.png": "6c16fe3e39d30ab5092ac01ddc170731fef023e2f18b1113291473d58d7a54da"
+  }
+}

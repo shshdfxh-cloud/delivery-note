@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Catch inconsistent delivery claims before they reach a client. A working SERV Reasoning demo with traceable evidence.">
+  <title>Delivery Note — evidence before confidence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./" aria-label="Delivery Note home"><span class="mark">d<span>n</span></span> delivery note<span class="beta">LAB</span></a><a href="https://github.com/shshdfxh-cloud/delivery-note" target="_blank" rel="noreferrer">View source <span aria-hidden="true">↗</span></a></header>
+  <main>
+    <section class="intro"><div><div class="eyebrow"><span class="dot"></span> BUILT WITH SERV REASONING</div><h1>Check the work.<br>Then write the handoff.</h1><p class="lede">A polished message can hide an unfinished job. Check the evidence first, then turn it into a delivery note you can review.</p></div><aside class="intro-note"><span class="step-label">THE WORKFLOW</span><div><b>01</b> Inspect the packet</div><div><b>02</b> Surface the gaps</div><div><b>03</b> Draft with evidence</div></aside></section>
+    <div class="workspace-title"><h2>Try a handoff</h2><span id="mode" class="mode">Loading demo…</span></div>
+    <section class="workspace">
+      <aside class="samples"><p class="step-label">01 / CHOOSE A SCENARIO</p><div id="cases"></div><div class="sample-note"><b>Synthetic data only.</b><p>These examples contain invented counts and a placeholder file hash. No real customer or payment data is included.</p></div></aside>
+      <section class="packet"><div class="panel-heading"><p class="step-label">02 / INSPECT THE EVIDENCE</p><span class="file-label">packet.json</span></div><h3 id="case-title">Evidence packet</h3><p id="case-caption" class="muted"></p><div class="rows-title"><span>Rows accounted for</span><strong id="balance"></strong></div><div class="bar" aria-hidden="true"><span id="kept-bar"></span><span id="duplicates-bar"></span><span id="rejected-bar"></span><span id="gap-bar"></span></div><dl class="metrics"><div><dt>Input</dt><dd id="input-count"></dd></div><div><dt>Kept</dt><dd id="kept-count"></dd></div><div><dt>Duplicates</dt><dd id="duplicate-count"></dd></div><div><dt>Rejected</dt><dd id="rejected-count"></dd></div></dl><div class="evidence-row"><span>Reported tests</span><strong id="tests"></strong></div><div class="evidence-row"><span>File inventory</span><strong>1 placeholder hash</strong></div><div class="evidence-row claim-row"><span>Self-reported claim</span><code id="claim"></code></div><details><summary>View input JSON</summary><pre id="packet-json"></pre></details><button id="review" class="primary" disabled>Review sample <span aria-hidden="true">↗</span></button><p id="run-explanation" class="run-explanation"></p></section>
+      <section class="result" aria-live="polite"><div class="panel-heading"><p class="step-label">03 / REVIEW THE HANDOFF</p><span class="ai-tag">SERV</span></div><div id="empty-result" class="empty-result"><div class="sheet-icon" aria-hidden="true">≡</div><h3>Confidence needs evidence.</h3><p>Review this packet to see the checks and a draft with traceable references.</p></div><div id="result-content" hidden><div id="verdict" class="verdict"></div><p id="provenance" class="provenance"></p><div id="findings"></div><div class="note-heading"><h3>Draft delivery note</h3><span>REVIEW BEFORE SENDING</span></div><div id="note" class="note"></div><details id="evidence-details"><summary>Inspect referenced evidence</summary><div id="facts"></div></details><button id="download" class="secondary">Download evidence + draft ↓</button></div><p id="error" role="alert" hidden></p></section>
+    </section>
+    <section class="bottom-note"><span class="asterisk">*</span><p><b>Consistency is not proof.</b> This demo checks reported counts and inventory syntax. It does not verify the underlying files, actual test runs, delivery, acceptance, or payment. The SERV note remains an AI draft for human review.</p></section>
+  </main>
+  <footer><span>Small handoffs. Fewer unsupported claims.</span><a href="https://docs.openserv.ai/serv-reasoning/sdk-integration" target="_blank" rel="noreferrer">SERV integration docs ↗</a></footer>
+  <script src="app.js"></script>
+</body>
+</html>

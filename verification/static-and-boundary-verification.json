@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Static hosting performs fresh checks and catches hidden data corruption",
+    "Static hosting verifies correct data without any local API or model",
+    "Static hosting cannot fabricate an executed web journey",
+    "Original SERV replay is preserved and labelled recorded",
+    "A deliberately simulated new-request failure cannot reuse an earlier success report",
+    "Actual external-fetch attempt blocked; passing output alone cannot establish backend behavior"
+  ],
+  "complete": true
+}
