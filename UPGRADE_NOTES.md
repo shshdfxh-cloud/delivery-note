@@ -1,50 +1,21 @@
-# 本次升级说明 · 2026-09-22
+# Delivery Note v0.2 — scope and verification
 
-## 现在用什么
+2026-09-22. Original baseline: 8b009ae. The implementation was committed locally as eda3396 before this publication follow-up.
 
-本机项目：`C:\Users\xbw\Desktop\Codex\delivery-note`。
-本地预览：`http://127.0.0.1:8766/`。服务停止后，在项目目录双击 `start-local.cmd`，再打开此地址。启动器不启用AI付费调用，也不设置开机自启。
+## What works
 
-原仓库基线：`main / 8b009ae4a61bee4e9937ee9fc01ad38e90836103`。本次在 `goal-driven-audit` 分支修改，未推送、未部署、未更改报名或账号设置。原公开网址在发布前仍是原版；旧SERV样例保留在 `legacy/`。
+Customer purpose → explicit acceptance conditions → actual file bytes and source recomputation → optional isolated static-web execution → evidence-backed criterion report. The browser is one adapter, not the product boundary; see PRODUCT_SCOPE.md.
 
-## 核心变化
+18 Python tests and 12 Node tests passed for the implementation. Additional local UI, static-hosting and browser evidence is in verification/. Synthetic same-count corruption (50 changed to 500) was caught by independent source recomputation. Correct data passed its declared contract. A broken quotation page failed discount and zero-quantity assertions; a correct page passed normal, discount and invalid-input journeys.
 
-以前：检查三组预设计数和清单格式，AI写交付说明。
-现在：客户目的 → 明确验收条件 → 实际文件和源数据对照 → 可选网页真实操作 → 带证据的逐项结论。文件存在、格式正确、数据自洽和客户目的实现不是同一件事。
+These are functional checks on synthetic examples, not an accuracy benchmark on unknown customer deliveries. Currently supported inputs are UTF-8 text, CSV, JSON and offline static-web assets. Arbitrary programs, production services, Office/PDF and independent real-world source authentication remain outside this release.
 
-浏览器可选择真实文件，标明哪些是原始依据，哪些是交付结果。实际字节计算SHA-256，CSV按记录解析，数据从依据独立重算，不信任自报行数或自报测试通过。网页流程在新的离线Edge浏览器中填写、点击、验证输出，不复用用户登录态。
+## AI and publication boundaries
 
-必需条件失败不能被其他通过项抵消。未运行、范围未确认、缺少依据均保留“未验证”；报告绑定目的、验收条件、文件字节快照。改变这些内容后必须重新验收。
+Original recorded SERV responses remain available under legacy/. New planning and explanation interfaces have substitute-response tests, which do not establish live model quality. Browser-console testing is a separate validation path and does not establish the application's backend integration.
 
-## 已实际验证
+The public static client performs fresh file checks without automatic uploads. It does not execute the local browser runner or make live SERV requests. No repeat contest entry, account-setting change, customers, revenue or award is implied. Publication state is established by repository history and the GitHub Pages deployment, not by a local commit alone.
 
-- 原有12项Python测试及新增6项Python测试通过；Node核心12项测试通过，共30项自动化测试。
-- 正常数据：从原始5行按订单号去重得到4行，逐格核对和425.00合计通过。
-- 隐藏数据错误：把50.00改成500.00，行数、唯一性和875.00合计自洽，但依据重算检查失败。
-- 正常网页：正常报价、SAVE10优惠码、无效数量三条流程实际填写/点击/断言通过。
-- 错误网页：正常报价能用；优惠码应54.00实际60.00、零数量应报错实际0.00，两项真实失败被报告定位。
-- 真实文件选择器上传、文件角色修改、精确验收规则应用、独立哈希对照、JSON/Markdown下载、目标更改使旧报告失效、中英文切换及390像素移动界面已实测。
+## Follow-up scope correction
 
-具体机器结果在 `verification/`。`ui-verification.json`、`static-and-boundary-verification.json` 记录流程级检查，JSON报告保存对应输入快照指纹、观察值及执行步骤。这里的示例材料是合成文件，不是客户数据，也不是对任意交付物准确率的评测。
-
-静态托管模式已实际验证：正常数据通过、隐藏篡改失败、网页运行保持未验证，原版录制回放可用。额外验证了外部请求会被阻断且不能因此获得通过结论，以及模拟新请求失败不会沿用先前成功报告。
-
-## 必须区分：AI集成不等于本次已实测模型
-
-新增SERV目标拆解及证据解读已实现，并验证了请求范围、明确同意、失败计次与模型建议不能覆盖确定性结论的代码路径。
-
-**本次没有成功执行新的SERV联网调用。** 带私有密钥文件的启动请求被平台安全层拦截，此后不再读取该密钥或尝试绕过，后续全部检查均在 `--max-calls 0` 下完成。因此不能声称已经验证新AI规划质量，模型边界测试中的替代响应也不是实际模型输出。原版已有的录制响应不用于冒充本次新能力的实跑。
-
-## 当前范围与下一阶段
-
-这是面向真实交付物的第一版验收系统，不是通用、无人监督、可证明一切目的的自动审查员。
-
-当前支持UTF-8文本、CSV、JSON、离线静态网页，最多40个文件/2 MiB；验收条件仍需人确认是否覆盖客户目的。原始依据与结果一致不等于原始依据本身真实。任意后端、生产账号、动态API、可执行程序、Office/PDF以及支付/接收证明不在本版可验证范围内。
-
-下一步最有价值的是在获得模型访问授权后，用真实SERV把自然语言目的拆成验收条件，并以非示例文件检验计划质量；随后按实际交付类型增加专用验证器，而不是先宣称“全类型全自动”。
-
-## 恢复与开发
-
-所有修改在独立功能分支；原main保留。停止本次预览后可切回原main查看旧版本，不需要删除用户文件或改全局配置。
-
-网页源码入口 `delivery_note/web/`，更新后运行 `python scripts/sync_web.py` 同步静态 `docs/`，此步骤不会发布。正式发布需要另行确认。
+The README, interface and PRODUCT_SCOPE.md now explicitly identify the product as general-purpose delivery review. Broader goal coverage, document/content reasoning, program behavior and full-system workflows are next priorities, not more website-only demonstrations.

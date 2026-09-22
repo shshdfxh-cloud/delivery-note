@@ -4,6 +4,14 @@
 
 A goal-driven acceptance workbench built with SERV Reasoning. AI proposes an explicit acceptance contract and explains gaps. A deterministic engine checks actual bytes; an optional fresh, offline browser executes real user journeys. AI never controls the authoritative verdict.
 
+## Product direction / 产品定位
+
+This is a **general-purpose, customer-goal-driven delivery audit**, not a website testing product. Browser automation is one evidence adapter. Documents, data, programs and full systems need different inspection methods but share the same purpose → criteria → checks → evidence → conclusion workflow.
+
+**项目目标是通用交付审查。** 当前是通用框架与第一批文件、数据和静态网页检查能力，不是已经能够自动验收任意交付物。下一步应补强目的拆解、内容与事实审查、不同类型的执行验证，而不是只围绕网页演示扩张。
+
+See [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md) for the fixed product goal, current boundaries and development priorities.
+
 ## What changed in v0.2
 
 The original three recorded SERV examples remain intact under **`legacy/`**. The new workbench checks **real selected files**, not placeholder hashes or saved verdicts. English and Chinese UI are available.
